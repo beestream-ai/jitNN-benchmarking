@@ -25,6 +25,7 @@ import ai.beestream.jitnn.Autocast;
 import ai.beestream.jitnn.DType;
 import ai.beestream.jitnn.F;
 import ai.beestream.jitnn.Grad;
+import ai.beestream.jitnn.JitnnRuntime;
 import ai.beestream.jitnn.Tensor;
 import ai.beestream.jitnn.engine.Engine;
 import ai.beestream.jitnn.engine.Node;
@@ -206,7 +207,7 @@ public final class Workloads {
             }
             Runnable step = w.setup().get();
             out.put(w.name(), Engine.capture(step));
-            Engine.reset();
+            JitnnRuntime.reset();
         }
         return out;
     }

@@ -18,8 +18,8 @@ package ai.beestream.jitnn.bench;
 import java.util.Map;
 
 import ai.beestream.jitnn.F;
+import ai.beestream.jitnn.JitnnRuntime;
 import ai.beestream.jitnn.Tensor;
-import ai.beestream.jitnn.engine.Engine;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
@@ -53,17 +53,17 @@ class LstmProbeAccelTest {
                 long t0 = System.nanoTime();
                 Tensor loss = F.lstm(x, wih, whh, bih, bhh, h0, c0)[0].square().mean();
                 loss.backward();
-                Engine.sync(loss, whh.grad(), wih.grad());
+                JitnnRuntime.sync(loss, whh.grad(), wih.grad());
                 long dt = System.nanoTime() - t0;
                 if (r >= 3) {
                     best = Math.min(best, dt);
                 }
                 if (r == 2) {
-                    Engine.kernelBreakdown();
+                    JitnnRuntime.kernelBreakdown();
                 }
             }
             System.out.printf("[lstmprobe] T=%d B=%d I=%d H=%d: step %.2f ms (best of %d)%n", t, b, in, h, best / 1e6, runs);
-            Map<String, long[]> k2 = Engine.kernelBreakdown();
+            Map<String, long[]> k2 = JitnnRuntime.kernelBreakdown();
             k2.entrySet().stream().sorted((p, q) -> Long.compare(q.getValue()[1], p.getValue()[1])).limit(8)
                     .forEach(e -> System.out.printf("[lstmprobe]   %-40s %6d launches %9.3f ms/step%n", e.getKey(), e.getValue()[0] / runs, e.getValue()[1] / 1e6 / runs));
         }

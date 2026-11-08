@@ -205,7 +205,7 @@ The loss curves are unchanged: every gate still matches PyTorch to four digits (
 0.1% (mixed precision).
 
 What changed, found with the per-operator profile (`TransformerBenchAccelTest` with
-`-Djitnn.test.profile=true`, `Engine.kernelBreakdown()`):
+`-Djitnn.test.profile=true`, `JitnnRuntime.kernelBreakdown()`):
 
 | Change | Effect (GPT-2 step) |
 |---|---|
@@ -287,7 +287,7 @@ rank's training step is one plan, and TornadoVM keeps a host copy of every devic
 
 `-Djitnn.fuse=true` (the default) against `false`, RTX 5070 Ti, TornadoVM develop 801ba0098,
 jitNN's kernels (`-Djitnn.native=off`), FP32, medians. Kernels and MB are per call, from
-`Engine.trafficStats()`: MB counts each operator's input and output tensors once, the least it
+`JitnnRuntime.trafficStats()`: MB counts each operator's input and output tensors once, the least it
 can read and write.
 
 | Workload | Kernels | MB | Time |

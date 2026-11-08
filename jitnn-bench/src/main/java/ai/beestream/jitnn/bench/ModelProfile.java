@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import ai.beestream.jitnn.engine.Engine;
+import ai.beestream.jitnn.JitnnRuntime;
 
 /**
  * Runs each workload's step end to end, as the models really run (fusion, plan replay, buffer
@@ -55,21 +55,21 @@ public final class ModelProfile {
                 Runnable step = wl.setup().get();
                 for (int i = 0; i < WARMUP; i++) {
                     step.run();
-                    Engine.sync();
+                    JitnnRuntime.sync();
                 }
-                Engine.kernelBreakdown();
+                JitnnRuntime.kernelBreakdown();
                 boolean cpuStats = Boolean.getBoolean("jitnn.cpu.stats");
                 if (cpuStats) {
-                    Engine.cpuReport();
+                    JitnnRuntime.cpuReport();
                 }
                 double[] wall = new double[STEPS];
                 Map<String, double[]> perOp = new TreeMap<>();
                 for (int i = 0; i < STEPS; i++) {
                     long t0 = System.nanoTime();
                     step.run();
-                    Engine.sync();
+                    JitnnRuntime.sync();
                     wall[i] = (System.nanoTime() - t0) / 1e6;
-                    for (var e : Engine.kernelBreakdown().entrySet()) {
+                    for (var e : JitnnRuntime.kernelBreakdown().entrySet()) {
                         String op = e.getKey().replaceAll("[\\[#].*", "");
                         double[] acc = perOp.computeIfAbsent(op, k -> new double[2]);
                         acc[0] += e.getValue()[0];
@@ -79,7 +79,7 @@ public final class ModelProfile {
                 Arrays.sort(wall);
                 System.out.printf(Locale.ROOT, "[model] %-28s median %9.3f ms/step  p10 %9.3f  p90 %9.3f%n", wl.name(), wall[STEPS / 2], wall[STEPS / 10], wall[STEPS * 9 / 10]);
                 if (cpuStats) {
-                    System.out.print(Engine.cpuReport());
+                    System.out.print(JitnnRuntime.cpuReport());
                 }
                 StringBuilder b = new StringBuilder();
                 b.append(String.format(Locale.ROOT, "{\"label\":\"%s\",\"device\":\"%s\",\"workload\":\"%s\",\"profile\":%b,\"step_ms\":%.4f,\"step_ms_p10\":%.4f,\"step_ms_p90\":%.4f,\"ops\":{", label,
@@ -97,7 +97,7 @@ public final class ModelProfile {
                 w.flush();
                 written++;
                 System.out.printf(Locale.ROOT, "[models] %-24s step %8.2f ms  device %8.2f ms%n", wl.name(), wall[STEPS / 2], dev);
-                Engine.reset();
+                JitnnRuntime.reset();
             }
         }
         return written;

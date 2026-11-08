@@ -108,7 +108,7 @@ final class OpCase {
         };
     }
 
-    /** Records the call once (inputs made on the first use); the caller runs it with Engine.sync(). */
+    /** Records the call once (inputs made on the first use); the caller runs it with JitnnRuntime.sync(). */
     void record() {
         if (inputs == null) {
             inputs = new Tensor[inShapes.length];

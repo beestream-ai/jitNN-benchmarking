@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import ai.beestream.jitnn.engine.Engine;
+import ai.beestream.jitnn.JitnnRuntime;
 import ai.beestream.jitnn.engine.Node;
 
 /**
@@ -103,9 +103,9 @@ public final class KernelBench {
         for (int attempt = 1; attempt <= 3; attempt++) {
             for (int i = 0; i < WARMUP; i++) {
                 c.record();
-                Engine.sync();
+                JitnnRuntime.sync();
             }
-            Engine.kernelBreakdown();
+            JitnnRuntime.kernelBreakdown();
             List<Double> dev = new ArrayList<>();
             List<Double> host = new ArrayList<>();
             double launches = 0;
@@ -113,10 +113,10 @@ public final class KernelBench {
             while ((dev.size() < MIN_CALLS || System.nanoTime() - start < MIN_WINDOW_NS) && dev.size() < MAX_CALLS) {
                 long t0 = System.nanoTime();
                 c.record();
-                Engine.sync();
+                JitnnRuntime.sync();
                 host.add((System.nanoTime() - t0) / 1e3);
                 long ns = 0;
-                for (long[] v : Engine.kernelBreakdown().values()) {
+                for (long[] v : JitnnRuntime.kernelBreakdown().values()) {
                     launches += v[0];
                     ns += v[1];
                 }
@@ -254,7 +254,7 @@ public final class KernelBench {
                     System.out.printf("[kbench] %4d/%d %-22s failed: %s%n", i, cases.size(), c.op.name(), e.getMessage());
                 } finally {
                     c.release();
-                    Engine.reset();
+                    JitnnRuntime.reset();
                 }
             }
         }
