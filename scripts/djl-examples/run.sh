@@ -1,4 +1,17 @@
 #!/bin/bash
+# Copyright (c) 2026 Beestream Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # usage: run.sh <djl checkout> <jitnn|pytorch|onnxruntime> <example: mnist|lstm|resnet|classify|yolo|yolo-loop> [example args...]
 # Copies DJL's example sources, builds, and runs one example on one engine. The training examples
 # are copied unchanged. The two inference examples name their engine in the source ("PyTorch",

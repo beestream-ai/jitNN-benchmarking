@@ -1,0 +1,10 @@
+jitNN benchmarking
+Copyright (c) 2026 Beestream Ltd.
+
+This repository is licensed under the Apache License, Version 2.0 (see LICENSE). It includes the
+third-party material listed below, under its own license.
+
+1. The Maven Wrapper, under the Apache License, Version 2.0
+
+   mvnw, mvnw.cmd and .mvn/wrapper/ are from the Apache Maven project
+   (The Apache Software Foundation) and keep their own license headers.

@@ -63,4 +63,4 @@ jitNN's own options and test properties are in its
 
 ## License
 
-Apache License 2.0, see [LICENSE](LICENSE). Copyright (c) 2026 Beestream Ltd.
+Apache License 2.0, see [LICENSE](LICENSE). Copyright (c) 2026 Beestream Ltd. Third-party material is listed in [NOTICE](NOTICE).
