@@ -31,8 +31,8 @@ import ai.beestream.jitnn.JitnnRuntime;
 import ai.beestream.jitnn.engine.Node;
 
 /**
- * Times every distinct operator call of the reference workloads on the current device, following
- * the kernel optimisation plan: correctness is the goldens' job, so here each call is replayed on
+ * Times every distinct operator call of the reference workloads on the current device.
+ * Correctness is the goldens' job, so here each call is replayed on
  * made-up inputs; 20 warm-up calls, then at least 100 timed calls and 0.3 s; the median, p10 and
  * p90 of the per-call device time (TornadoVM's profiler) and of the host-to-host time; a window is
  * accepted when (p90 - p10) / median is under 5% (or p90 - p10 is at most 2 us, the profiler's

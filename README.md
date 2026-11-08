@@ -10,7 +10,7 @@ are in [PERFORMANCE.md](PERFORMANCE.md).
 |---|---|
 | [PERFORMANCE.md](PERFORMANCE.md) | Inference, training, per-kernel, fusion, autotuning, multi-GPU and compile-time results on CUDA, Metal and OpenCL |
 | `jitnn-bench` | Maven module: the reference workloads captured as traces (`Workloads`), every distinct operator call timed on a device (`KernelBench`), whole training and inference steps (`ModelProfile`), GPU clock monitoring |
-| `scripts` | Drivers and the framework side: `inference.py` (PyTorch and ONNX Runtime inference), `gsweep.py` and `gtrain.py` (fastest PyTorch, ONNX Runtime and TensorRT variants), `gpu_final.sh` (the GPU head-to-head), `run_kernels.sh` and `run_models.sh` (`jitnn-bench`), `kernels.py` (the same calls through PyTorch), `tune.py` (jitNN's GEMM tuning tables), `run_mac.sh` (Apple silicon), `djl` and `djl-examples` (DJL), `ceilings` (device peaks) |
+| `scripts` | Drivers and the framework side: `inference.py` (PyTorch and ONNX Runtime inference), `gsweep.py` and `gtrain.py` (fastest PyTorch, ONNX Runtime and TensorRT variants), `gpu_final.sh` (the GPU head-to-head) and `gpu_summary.py`, `train_bench.py` (PyTorch training steps), `fp64check.py` and `jerr.py` (output error), `run_kernels.sh` and `run_models.sh` (`jitnn-bench`) with `compare.py`, `rank.py`, `sweep.py` and `nsys_kernels.py` to read their results, `kernels.py` (the same calls through PyTorch), `tune.py` (jitNN's GEMM tuning tables), `run_mac.sh` (Apple silicon), `djl`, `djl-examples` and `trace.py` (DJL), `ceilings` (device peaks) |
 | `results` | Raw results per device and date |
 
 ## Building
@@ -34,7 +34,7 @@ JITNN_HOME=<jitNN> scripts/gpu_final.sh <out dir>
 scripts/run_kernels.sh 0:0 <out dir>
 ```
 
-Each script describes its arguments and environment in its first lines.
+Each script describes its arguments and environment at the top, below the license header.
 
 ## Properties
 

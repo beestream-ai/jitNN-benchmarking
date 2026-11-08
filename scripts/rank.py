@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Step 2 of the kernel optimisation plan: the families ranked by measured device time, overall and
+"""The operator families ranked by measured device time, overall and
 per workload, from the end-to-end model profiles (ModelProfileAccelTest), checked against the
 replayed calls of the kernel benchmark.
 

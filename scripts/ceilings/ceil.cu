@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Ceilings for the kernel optimisation plan: device copy bandwidth (read+write) and FP32 FMA peak.
+// Device ceilings: device copy bandwidth (read+write) and FP32 FMA peak.
 #include <cstdio>
 #include <cuda_runtime.h>
 #include <algorithm>
