@@ -17,7 +17,7 @@ for l in L:
         r,fw,v,mod,p,h,s=m.groups()
         f={'pytorch':'PyTorch','trt':'TRT'}.get(fw,'ORT-TRT' if v=='trt' else 'ORT')
         inf[(mod,p,f)].append(float(h)); setup.setdefault((mod,p,f),float(s)); continue
-    m=re.match(r"r(\d) (\S+) \[t1\] jitnn (\S+?)_(fp32|fp16h|fp16)\s+median\s+([\d.]+).*first call (\d+) ms",l)
+    m=re.match(r"r(\d) (\S+) \[inference\] jitnn (\S+?)_(fp32|fp16h|fp16)\s+median\s+([\d.]+).*first call (\d+) ms",l)
     if m:
         r,cfg,mod,mode,ms,fc=m.groups()
         if mode=='fp16': continue

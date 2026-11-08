@@ -1,8 +1,8 @@
 """One framework variant, one shape, one precision on the GPU: median ms host to host (numpy in,
 numpy out) and device resident (device tensors in and out), and the max error vs an FP32 reference
-(PyTorch eager, TF32 off), on t1.py's models and inputs.
+(PyTorch eager, TF32 off), on inference.py's models and inputs.
 
-usage: python gsweep.py <t1 dir> <work dir> <framework> <variant> <model> <batch> <seq> <precision>
+usage: python gsweep.py <inference dir> <work dir> <framework> <variant> <model> <batch> <seq> <precision>
   framework pytorch: eager | bench | cl | compile | compile-ro | compile-noacg
   framework trt (Torch-TensorRT): dynamo
   framework ort: cuda | exh | exh-graph | opt-exh | opt-exh-graph | trt
@@ -16,17 +16,17 @@ import time
 
 import numpy as np
 
-t1dir, work, fw, variant, kind, b, t, prec = sys.argv[1:9]
+scriptdir, work, fw, variant, kind, b, t, prec = sys.argv[1:9]
 b, t = int(b), int(t)
-sys.path.insert(0, t1dir)
+sys.path.insert(0, scriptdir)
 import torch  # noqa: E402
-import t1  # noqa: E402
+import inference  # noqa: E402
 
 WARMUP, RUNS = 10, 50
 os.makedirs(work, exist_ok=True)
 dev = torch.device("cuda")
 name = f"resnet50_b{b}" if kind == "resnet50" else f"bert_b{b}_s{t}"
-x_np = t1.images(b) if kind == "resnet50" else t1.tokens(b, t)
+x_np = inference.images(b) if kind == "resnet50" else inference.tokens(b, t)
 
 
 def set_tf32(on):
@@ -36,7 +36,7 @@ def set_tf32(on):
 
 def build():
     torch.manual_seed(0)
-    net = t1.models.resnet50(3, 1000, False, 1) if kind == "resnet50" else t1.BertEncoder()
+    net = inference.models.resnet50(3, 1000, False, 1) if kind == "resnet50" else inference.BertEncoder()
     return net.eval().float().to(dev)
 
 
@@ -104,7 +104,7 @@ else:
     import onnxruntime as ort
     path = os.path.join(work, f"{name}_{'fp16' if half else 'fp32'}.onnx")
     if not os.path.exists(path):
-        t1.export(net, x_dev, path)
+        inference.export(net, x_dev, path)
     if variant.startswith("opt"):
         from onnxruntime.transformers import optimizer
         opath = path.replace(".onnx", ".opt.onnx")

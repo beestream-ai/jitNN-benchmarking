@@ -8,7 +8,7 @@ and compile time.
 
 ResNet-50 and BERT-base (the encoder, 12 layers of 768), built by jitNN from the same seeds as the
 Python side, so every framework runs the same weights on the same inputs (`InferenceBenchAccelTest`
-and `scripts/t1.py`). Each timed call is host input in, forward pass, host output out; 10
+and `scripts/inference.py`). Each timed call is host input in, forward pass, host output out; 10
 warm-up calls, then the median of 50. FP32 runs have TF32 off in every framework. FP16 rows run the
 whole model in half precision in every framework (`Autocast.enableHalf` in jitNN). jitNN's FP32
 outputs match PyTorch's to 3e-7 to 1e-6, its FP16 outputs to about 4e-4. Every run waited for an
@@ -89,12 +89,12 @@ The BERT b8 x 512 FP16 row was timed on a busy machine (re-timings spread from 1
 - On its own kernels jitNN is level with or ahead of PyTorch on ResNet-50 FP32 on NVIDIA GPUs and
   1.3-3x behind on BERT and FP16. Autotuning closes a third of the BERT FP32 gap on the RTX 5070 Ti.
 
-To reproduce: `python scripts/t1.py <dir>` exports the models and times PyTorch and ONNX
-Runtime; `python scripts/onnx/t1_onnx.py <dir>` writes ONNX Runtime's outputs and timings next to
-the models; `./mvnw test -Paccel-tests -pl jitnn-onnx -Dtest=OnnxT1AccelTest -Djitnn.onnx.t1=<dir>`
+To reproduce: `python scripts/inference.py <dir>` exports the models and times PyTorch and ONNX
+Runtime; `python <jitNN>/scripts/onnx/inference_onnx.py <dir>` writes ONNX Runtime's outputs and timings next to
+the models; `./mvnw test -Paccel-tests -pl jitnn-onnx -Dtest=OnnxInferenceAccelTest -Djitnn.onnx.inference=<dir>`
 runs the same files through `jitnn-onnx`.
-`python scripts/onnx/int8_onnx.py <dir> <int8 dir>` quantises them with ONNX Runtime (BERT dynamic,
-ResNet-50 QDQ) and the same test with `-Djitnn.onnx.t1=<int8 dir> -Djitnn.onnx.t1.match=int8` runs
+`python <jitNN>/scripts/onnx/int8_onnx.py <dir> <int8 dir>` quantises them with ONNX Runtime (BERT dynamic,
+ResNet-50 QDQ) and the same test with `-Djitnn.onnx.inference=<int8 dir> -Djitnn.onnx.inference.match=int8` runs
 the INT8 files (results in OPERATORS.md, "Quantised models").
 
 ### DJL examples

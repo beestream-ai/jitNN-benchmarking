@@ -1,7 +1,7 @@
 """Training step time of PyTorch on jitNN's training workloads (jitnn-bench Workloads.java, same
 models, seeds, optimisers and losses): one variant, one workload, one precision per call.
 
-usage: python gtrain.py <t1 dir> <work dir> <variant> <workload> <precision>
+usage: python gtrain.py <inference dir> <work dir> <variant> <workload> <precision>
   variant: eager | fused (fused optimiser, channels-last CNNs) | compile | compile-ma (max-autotune-no-cudagraphs) | compile-ro (reduce-overhead)
   workload: resnet50_cifar_train_b32 | resnet18_train_b64 | gpt2_train_b8_s256 | bert_train_b8_s128
   precision: fp32 (TF32 off) | tf32 | fp16 (autocast to FP16)
@@ -14,11 +14,11 @@ import time
 import torch
 import torch.nn.functional as F
 
-t1dir, work, variant, wl, prec = sys.argv[1:6]
-sys.path.insert(0, t1dir)
-import t1  # noqa: E402
+scriptdir, work, variant, wl, prec = sys.argv[1:6]
+sys.path.insert(0, scriptdir)
+import inference  # noqa: E402
 
-models, transformers = t1.models, t1.transformers
+models, transformers = inference.models, inference.transformers
 WARMUP, STEPS = 10, 30
 dev = torch.device("cuda")
 torch.backends.cuda.matmul.allow_tf32 = prec == "tf32"
@@ -35,7 +35,7 @@ elif wl == "resnet18_train_b64":
 elif wl == "gpt2_train_b8_s256":
     net, b, t, vocab = transformers.GPT2(50257, 1024, 768, 12, 12, 1), 8, 256, 50257
 else:
-    net, b, t, vocab = t1.BertEncoder(), 8, 128, 30522
+    net, b, t, vocab = inference.BertEncoder(), 8, 128, 30522
 net = net.to(dev).train()
 if cnn:
     x = (torch.rand(b, 3, 32, 32, generator=g) * 2 - 1).to(dev)
@@ -45,7 +45,7 @@ if cnn:
         x = x.contiguous(memory_format=torch.channels_last)
     opt = torch.optim.SGD(net.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4, fused=fused or None)
 else:
-    x = torch.from_numpy(t1.tokens(b, t) % vocab).to(dev)
+    x = torch.from_numpy(inference.tokens(b, t) % vocab).to(dev)
     y = torch.from_numpy(((torch.arange(b * t) * 7919 + 13) % vocab).numpy()).to(dev)
     opt = torch.optim.Adam(net.parameters(), lr=3e-4 if wl.startswith("gpt2") else 1e-4, fused=fused or None)
 

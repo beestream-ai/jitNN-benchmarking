@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import t1  # noqa: E402
+import inference  # noqa: E402
 
 
 def err(a, ref):
@@ -22,8 +22,8 @@ def main(jdir, names):
         kind = "resnet50" if name.startswith("resnet50") else "bert"
         parts = name.split("_")
         b = int(parts[1][1:])
-        x = t1.images(b) if kind == "resnet50" else t1.tokens(b, int(parts[2][1:]))
-        net = (t1.models.resnet50(3, 1000, False, 1) if kind == "resnet50" else t1.BertEncoder()).eval()
+        x = inference.images(b) if kind == "resnet50" else inference.tokens(b, int(parts[2][1:]))
+        net = (inference.models.resnet50(3, 1000, False, 1) if kind == "resnet50" else inference.BertEncoder()).eval()
         with torch.no_grad():
             ref = net.double()(torch.from_numpy(x if kind == "bert" else x.astype(np.float64))).numpy()
             gpu = net.float().cuda()(torch.from_numpy(x).cuda()).double().cpu().numpy()

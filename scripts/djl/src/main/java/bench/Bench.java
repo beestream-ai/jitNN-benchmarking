@@ -15,8 +15,8 @@ import ai.djl.ndarray.types.Shape;
 import ai.djl.translate.NoopTranslator;
 
 /**
- * DJL inference timing with the protocol of scripts/t1.py: host input in, host output out,
- * 10 warm-up calls, then the median of 50. The inputs are the deterministic ones t1.py and jitNN's
+ * DJL inference timing with the protocol of scripts/inference.py: host input in, host output out,
+ * 10 warm-up calls, then the median of 50. The inputs are the deterministic ones inference.py and jitNN's
  * InferenceBenchAccelTest build.
  *
  * <p>usage: Bench &lt;OnnxRuntime|PyTorch&gt; &lt;model file&gt; &lt;resnet50|bert&gt; &lt;batch&gt; &lt;seq&gt; &lt;fp32|fp16&gt; &lt;label&gt;
@@ -128,7 +128,7 @@ public final class Bench {
         }
         Arrays.sort(ms);
         double median = ms[RUNS / 2];
-        System.out.printf("[t1] %-12s %-28s median %8.3f ms  p10 %8.3f  p90 %8.3f  %10.1f samples/s  (first call %.0f ms)%n", engine, name, median, ms[RUNS / 10], ms[RUNS * 9 / 10],
+        System.out.printf("[inference] %-12s %-28s median %8.3f ms  p10 %8.3f  p90 %8.3f  %10.1f samples/s  (first call %.0f ms)%n", engine, name, median, ms[RUNS / 10], ms[RUNS * 9 / 10],
                 samples * 1000 / median, first);
     }
 }

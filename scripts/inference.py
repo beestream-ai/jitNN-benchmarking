@@ -5,7 +5,7 @@ Protocol for every framework: host input in, host output out, 10 warm-up calls, 
 of 50 timed calls. FP32 runs have TF32 off everywhere (PyTorch and ONNX Runtime's CUDA provider),
 so they compare FP32 arithmetic; FP16 runs use FP16 weights and activations.
 
-usage: python t1.py [--device cuda|mps|cpu] [--threads N] [--models resnet50,bert] <work dir> [jitnn output dir]
+usage: python inference.py [--device cuda|mps|cpu] [--threads N] [--models resnet50,bert] <work dir> [jitnn output dir]
 
 --device mps runs PyTorch on Apple's Metal (MPS) and ONNX Runtime on its CoreML provider, limited
 to the CPU and GPU (not the Neural Engine), so both use the same GPU as jitNN's Metal backend.
@@ -14,7 +14,7 @@ to the CPU and GPU (not the Neural Engine), so both use the same GPU as jitNN's 
 (default: all the cores PyTorch sees); the comparison for jitNN's CPU backend.
 
 Exports one ONNX model per configuration into <work dir>, prints one line per run and writes
-<work dir>/t1.json. With a jitNN output dir (written by InferenceBenchAccelTest with
+<work dir>/inference.json. With a jitNN output dir (written by InferenceBenchAccelTest with
 -Djitnn.bench.out) it also reports how far jitNN's outputs are from PyTorch's FP32 ones.
 """
 import copy
@@ -26,7 +26,11 @@ import time
 import numpy as np
 import torch
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pytorch"))
+# jitNN's PyTorch models (scripts/pytorch in the jitNN checkout named by JITNN_HOME): the same layers,
+# parameter order and initial weights as jitNN's
+if "JITNN_HOME" not in os.environ:
+    sys.exit("set JITNN_HOME to a jitNN checkout (its scripts/pytorch builds the PyTorch models)")
+sys.path.insert(0, os.path.join(os.environ["JITNN_HOME"], "scripts", "pytorch"))
 import models  # noqa: E402
 import transformers  # noqa: E402
 
@@ -128,7 +132,7 @@ def main(work, jitnn_dir, device="cuda", kinds=("resnet50", "bert")):
             err = float(np.max(np.abs(out.astype(np.float64) - ref)) / max(np.max(np.abs(ref)), 1e-30))
         results.append(dict(engine=engine, run=name, median_ms=med, p10_ms=p10, p90_ms=p90, samples_per_s=samples * 1000 / med, max_rel_err_vs_fp32=err))
         e = "" if err is None else f"  max err vs PyTorch FP32 {err:.1e}"
-        print(f"[t1] {engine:12s} {name:28s} median {med:8.3f} ms  p10 {p10:8.3f}  p90 {p90:8.3f}  {samples * 1000 / med:10.1f} samples/s{e}", flush=True)
+        print(f"[inference] {engine:12s} {name:28s} median {med:8.3f} ms  p10 {p10:8.3f}  p90 {p90:8.3f}  {samples * 1000 / med:10.1f} samples/s{e}", flush=True)
 
     def jitnn_check(name, ref):
         if jitnn_dir is None:
@@ -137,7 +141,7 @@ def main(work, jitnn_dir, device="cuda", kinds=("resnet50", "bert")):
         if os.path.exists(f):
             out = np.fromfile(f, dtype=np.float32).reshape(ref.shape)
             err = float(np.max(np.abs(out.astype(np.float64) - ref)) / max(np.max(np.abs(ref)), 1e-30))
-            print(f"[t1] jitnn output {name}: max err vs PyTorch FP32 {err:.1e}", flush=True)
+            print(f"[inference] jitnn output {name}: max err vs PyTorch FP32 {err:.1e}", flush=True)
             results.append(dict(engine="jitnn-check", run=name, max_rel_err_vs_fp32=err))
 
     configs = [("resnet50", b, None) for b in RESNET_BATCHES] + [("bert", b, t) for b, t in BERT_SHAPES]
@@ -178,7 +182,7 @@ def main(work, jitnn_dir, device="cuda", kinds=("resnet50", "bert")):
         elif device == "mps":
             torch.mps.empty_cache()
     import onnxruntime as ort
-    with open(os.path.join(work, "t1.json"), "w") as f:
+    with open(os.path.join(work, "inference.json"), "w") as f:
         json.dump(dict(torch=torch.__version__, onnxruntime=ort.__version__, gpu=gpu_name(device), results=results), f, indent=1)
 
 

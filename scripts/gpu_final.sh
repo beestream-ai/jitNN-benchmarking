@@ -48,7 +48,7 @@ jinf() { # round name env only extra...
   local r=$1 name=$2 envs=$3 only=$4; shift 4
   local tag=r$r-jitnn-$name-${only:-all}
   peak $tag bash -c "cd $JITNN && env $envs timeout 7200 ./mvnw -q test -Paccel-tests -Djitnn.test.device=$DEV -Djitnn.test.deviceMemory=$DMEM -pl jitnn-nn -Dtest=InferenceBenchAccelTest \"-Djitnn.test.extra=-Djitnn.bench.inference=true -Djitnn.bench.only=$only $*\"" > $OUT/logs/$tag.log 2>&1
-  grep -E "^\[t1\] jitnn" $OUT/logs/$tag.log | sed "s/^/r$r $name /" >> $OUT/final.txt
+  grep -E "^\[inference\] jitnn" $OUT/logs/$tag.log | sed "s/^/r$r $name /" >> $OUT/final.txt
 }
 
 jtr() { # round name env extra...

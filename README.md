@@ -10,7 +10,7 @@ are in [PERFORMANCE.md](PERFORMANCE.md).
 |---|---|
 | [PERFORMANCE.md](PERFORMANCE.md) | Inference, training, per-kernel, fusion, autotuning, multi-GPU and compile-time results on CUDA, Metal and OpenCL |
 | `jitnn-bench` | Maven module: the reference workloads captured as traces (`Workloads`), every distinct operator call timed on a device (`KernelBench`), whole training and inference steps (`ModelProfile`), GPU clock monitoring |
-| `scripts` | Drivers and the framework side: `t1.py` (PyTorch and ONNX Runtime inference), `gsweep.py` and `gtrain.py` (fastest PyTorch, ONNX Runtime and TensorRT variants), `gpu_final.sh` (the GPU head-to-head), `run_kernels.sh` and `run_models.sh` (`jitnn-bench`), `kernels.py` (the same calls through PyTorch), `tune.py` (jitNN's GEMM tuning tables), `run_mac.sh` (Apple silicon), `djl` and `djl-examples` (DJL), `ceilings` (device peaks) |
+| `scripts` | Drivers and the framework side: `inference.py` (PyTorch and ONNX Runtime inference), `gsweep.py` and `gtrain.py` (fastest PyTorch, ONNX Runtime and TensorRT variants), `gpu_final.sh` (the GPU head-to-head), `run_kernels.sh` and `run_models.sh` (`jitnn-bench`), `kernels.py` (the same calls through PyTorch), `tune.py` (jitNN's GEMM tuning tables), `run_mac.sh` (Apple silicon), `djl` and `djl-examples` (DJL), `ceilings` (device peaks) |
 | `results` | Raw results per device and date |
 
 ## Building
@@ -23,9 +23,11 @@ source <TornadoVM>/setvars.sh                       # TORNADOVM_HOME
 ./mvnw install -DskipTests                          # this repository
 ```
 
-Scripts run from this directory. Those that also run jitNN's own inference benchmark
-(`InferenceBenchAccelTest`: `gpu_final.sh`, `run_mac.sh`) and `tune.py`, which writes jitNN's
-tuning tables, take the jitNN checkout from `JITNN_HOME`:
+Scripts run from this directory and take the jitNN checkout from `JITNN_HOME` when they need it:
+the Python side builds its PyTorch models with jitNN's `scripts/pytorch` (`inference.py`,
+`train_bench.py`, and those built on `inference.py`), `gpu_final.sh` and `run_mac.sh` also run
+jitNN's own inference benchmark (`InferenceBenchAccelTest`), and `tune.py` writes jitNN's tuning
+tables:
 
 ```bash
 JITNN_HOME=<jitNN> scripts/gpu_final.sh <out dir>

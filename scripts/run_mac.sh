@@ -31,11 +31,11 @@ if [ "${SKIP_JITNN:-0}" != 1 ]; then
     echo "== jitNN on Metal, $mode"
     (cd "$JITNN" && ./mvnw -q test -Paccel-tests -Djitnn.test.device="$DEV" -Djitnn.test.deviceMemory="${DEVICE_MEMORY:-24GB}" -pl jitnn-nn \
       -Dtest=InferenceBenchAccelTest "-Djitnn.test.extra=$extra") > "$OUT/jitnn-$mode.log" 2>&1 || true
-    grep -E "\[t1\]|\[jitnn\] native|Tests run:|FAIL|Exception" "$OUT/jitnn-$mode.log" | grep -v "Time elapsed: .* s -- in" || true
+    grep -E "\[inference\]|\[jitnn\] native|Tests run:|FAIL|Exception" "$OUT/jitnn-$mode.log" | grep -v "Time elapsed: .* s -- in" || true
   done
 fi
 
 if [ "${SKIP_FRAMEWORKS:-0}" != 1 ]; then
   echo "== PyTorch (MPS) and ONNX Runtime (CoreML)"
-  $PY scripts/t1.py --device mps --models "$MODELS" "$OUT/models" 2>&1 | tee "$OUT/frameworks.log" | grep "\[t1\]" || true
+  $PY scripts/inference.py --device mps --models "$MODELS" "$OUT/models" 2>&1 | tee "$OUT/frameworks.log" | grep "\[inference\]" || true
 fi

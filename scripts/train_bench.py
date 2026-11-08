@@ -18,7 +18,11 @@ import time
 import torch
 import torch.nn.functional as F
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pytorch"))
+# jitNN's PyTorch models (scripts/pytorch in the jitNN checkout named by JITNN_HOME): the same layers,
+# parameter order and initial weights as jitNN's
+if "JITNN_HOME" not in os.environ:
+    sys.exit("set JITNN_HOME to a jitNN checkout (its scripts/pytorch builds the PyTorch models)")
+sys.path.insert(0, os.path.join(os.environ["JITNN_HOME"], "scripts", "pytorch"))
 import models  # noqa: E402
 import transformers  # noqa: E402
 
