@@ -1,0 +1,10 @@
+target/
+*.log
+.idea/
+*.iml
+.DS_Store
+.vscode/
+hs_err_pid*.log
+__pycache__/
+.claude/
+docs/_build/

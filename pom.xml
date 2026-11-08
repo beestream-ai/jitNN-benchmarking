@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- jitNN's parent: the TornadoVM and test settings (accel-tests profile) the benchmarks run with.
+         Install jitNN first (./mvnw install -DskipTests in a jitNN checkout). -->
+    <parent>
+        <groupId>ai.beestream</groupId>
+        <artifactId>jitnn-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>jitnn-benchmarking</artifactId>
+    <packaging>pom</packaging>
+    <name>jitNN benchmarking</name>
+    <description>Benchmarks of jitNN against PyTorch, ONNX Runtime and DJL, and their results</description>
+
+    <modules>
+        <module>jitnn-bench</module>
+    </modules>
+</project>
