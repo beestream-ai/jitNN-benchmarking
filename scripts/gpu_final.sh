@@ -26,12 +26,13 @@
 #   - PYTHON_ORT: a Python with onnxruntime-gpu whose TensorRT provider finds its TensorRT (ORT 1.31
 #     takes TensorRT 10, Torch-TensorRT 2.14 takes 11: two environments), with ORT_LIBRARY_PATH the
 #     library path it needs (its tensorrt_libs and nvidia/*/lib directories);
-#   - optional: DEVICE (jitNN's test device, default 0:0), ROUNDS (default 3), DEVICE_MEMORY (default 20GB).
+#   - optional: DEVICE (jitNN's test device, default 0:0), ROUNDS (default 3), DEVICE_MEMORY (default 20GB),
+#     FRAMEWORKS (default "pt ort trt ortt"; "pt ort" leaves TensorRT out, where it is not installed).
 # The Python runs get only their own libraries: a cuDNN on LD_LIBRARY_PATH for jitNN breaks PyTorch's.
 set -u
 OUT=${1:?usage: gpu_final.sh <out dir>}
 PY=${PYTHON:?set PYTHON}; PYO=${PYTHON_ORT:?set PYTHON_ORT}; ORTLD=${ORT_LIBRARY_PATH:-}
-DEV=${DEVICE:-0:0}; ROUNDS=${ROUNDS:-3}; DMEM=${DEVICE_MEMORY:-20GB}
+DEV=${DEVICE:-0:0}; ROUNDS=${ROUNDS:-3}; DMEM=${DEVICE_MEMORY:-20GB}; FW=" ${FRAMEWORKS:-pt ort trt ortt} "
 T=$(pwd)/scripts; W=$OUT/work; MVN=${MVN:-./mvnw}
 JITNN=${JITNN_HOME:?set JITNN_HOME to a jitNN checkout}
 export TORCHINDUCTOR_CACHE_DIR=$W/inductor
@@ -106,6 +107,7 @@ for r in $(seq 1 $ROUNDS); do
   for s in $SHAPES; do IFS=: read k b t <<< "$s"
     for p in fp32 tf32 fp16; do
       for f in $(order $r); do
+        [[ "$FW" == *" $f "* ]] || continue
         case $f in
           pt) gs $r $PY "" pytorch $(ptv $k $b $p) $k $b $t $p;;
           ort) gs $r $PYO "$ORTLD" ort $(ortv $k $b $p) $k $b $t $p;;
