@@ -1,0 +1,3 @@
+{"label":"","device":"0:0","workload":"resnet50_cifar_train_b32","profile":false,"step_ms":31.6452,"step_ms_p10":30.9296,"step_ms_p90":33.0645,"ops":{},"device_ms":0.0000}
+{"label":"","device":"0:0","workload":"gpt2_train_b8_s256","profile":false,"step_ms":140.5759,"step_ms_p10":140.1514,"step_ms_p90":141.0530,"ops":{},"device_ms":0.0000}
+{"label":"","device":"0:0","workload":"bert_train_b8_s128","profile":false,"step_ms":55.7955,"step_ms_p10":55.6602,"step_ms_p90":55.9894,"ops":{},"device_ms":0.0000}

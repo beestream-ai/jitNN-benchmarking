@@ -1,0 +1,426 @@
+[mem] r1-jitnn-strict-resnet50_b1_fp32 1391 148
+r1 strict [inference] jitnn resnet50_b1_fp32             median    2.743 ms  p10    2.611  p90    3.390       364.5 samples/s  (first call 9088 ms)
+[mem] r1-jitnn-tf32-resnet50_b1_fp32 1521 148
+r1 tf32 [inference] jitnn resnet50_b1_fp32             median    2.169 ms  p10    1.948  p90    2.498       461.0 samples/s  (first call 2827 ms)
+[mem] r1-jitnn-fp16-resnet50_b1_fp16h 1463 148
+r1 fp16 [inference] jitnn resnet50_b1_fp16h            median    1.766 ms  p10    1.450  p90    2.192       566.2 samples/s  (first call 4248 ms)
+[mem] r1-jitnn-strict-resnet50_b32_fp32 3541 148
+r1 strict [inference] jitnn resnet50_b32_fp32            median   24.619 ms  p10   24.039  p90   25.014      1299.8 samples/s  (first call 9955 ms)
+[mem] r1-jitnn-tf32-resnet50_b32_fp32 3319 148
+r1 tf32 [inference] jitnn resnet50_b32_fp32            median   11.141 ms  p10   10.567  p90   11.497      2872.3 samples/s  (first call 1853 ms)
+[mem] r1-jitnn-fp16-resnet50_b32_fp16h 4315 148
+r1 fp16 [inference] jitnn resnet50_b32_fp16h           median    6.922 ms  p10    6.118  p90    7.372      4622.7 samples/s  (first call 4081 ms)
+[mem] r1-jitnn-strict-resnet50_b128_fp32 10165 148
+r1 strict [inference] jitnn resnet50_b128_fp32           median   84.425 ms  p10   83.841  p90   84.906      1516.1 samples/s  (first call 9567 ms)
+[mem] r1-jitnn-tf32-resnet50_b128_fp32 8857 148
+r1 tf32 [inference] jitnn resnet50_b128_fp32           median   32.336 ms  p10   31.773  p90   32.796      3958.4 samples/s  (first call 2467 ms)
+[mem] r1-jitnn-fp16-resnet50_b128_fp16h 12581 148
+r1 fp16 [inference] jitnn resnet50_b128_fp16h          median   18.537 ms  p10   17.769  p90   18.887      6905.0 samples/s  (first call 4486 ms)
+[mem] r1-jitnn-strict-bert_b1_s128_fp32 1097 148
+r1 strict [inference] jitnn bert_b1_s128_fp32            median    4.278 ms  p10    3.962  p90    4.925       233.8 samples/s  (first call 1828 ms)
+[mem] r1-jitnn-tf32-bert_b1_s128_fp32 1097 148
+r1 tf32 [inference] jitnn bert_b1_s128_fp32            median    2.829 ms  p10    2.482  p90    3.455       353.5 samples/s  (first call 1503 ms)
+[mem] r1-jitnn-fp16-bert_b1_s128_fp16h 1655 148
+r1 fp16 [inference] jitnn bert_b1_s128_fp16h           median    2.045 ms  p10    1.582  p90    2.405       489.1 samples/s  (first call 2651 ms)
+[mem] r1-jitnn-strict-bert_b32_s128_fp32 1225 148
+r1 strict [inference] jitnn bert_b32_s128_fp32           median   48.730 ms  p10   48.395  p90   49.406       656.7 samples/s  (first call 1869 ms)
+[mem] r1-jitnn-tf32-bert_b32_s128_fp32 1193 148
+r1 tf32 [inference] jitnn bert_b32_s128_fp32           median   14.300 ms  p10   14.070  p90   14.928      2237.8 samples/s  (first call 1501 ms)
+[mem] r1-jitnn-fp16-bert_b32_s128_fp16h 1847 148
+r1 fp16 [inference] jitnn bert_b32_s128_fp16h          median    6.289 ms  p10    6.060  p90    6.672      5088.4 samples/s  (first call 2551 ms)
+[mem] r1-jitnn-strict-bert_b8_s512_fp32 1227 148
+r1 strict [inference] jitnn bert_b8_s512_fp32            median   54.986 ms  p10   54.423  p90   55.466       145.5 samples/s  (first call 1838 ms)
+[mem] r1-jitnn-tf32-bert_b8_s512_fp32 1195 148
+r1 tf32 [inference] jitnn bert_b8_s512_fp32            median   20.599 ms  p10   20.395  p90   21.077       388.4 samples/s  (first call 1536 ms)
+[mem] r1-jitnn-fp16-bert_b8_s512_fp16h 1851 148
+r1 fp16 [inference] jitnn bert_b8_s512_fp16h           median    6.692 ms  p10    6.422  p90    6.977      1195.4 samples/s  (first call 2722 ms)
+[mem] r1-pytorch-compile-ro-resnet50-1-0-fp32 10049 148
+r1 [gsweep] pytorch compile-ro     resnet50_b1      fp32 host     4.415 ms (p10    4.404 p90    4.431)  dev     4.240 ms  err 2.1e-07  setup   12.1 s
+[mem] r1-ort-exh-graph-resnet50-1-0-fp32 963 148
+r1 [gsweep] ort     exh-graph      resnet50_b1      fp32 host     3.339 ms (p10    3.328 p90    3.347)  dev     3.244 ms  err 3.7e-07  setup    6.1 s
+[mem] r1-pytorch-compile-ro-resnet50-1-0-tf32 10009 148
+r1 [gsweep] pytorch compile-ro     resnet50_b1      tf32 host     1.706 ms (p10    1.698 p90    1.714)  dev     1.531 ms  err 2.0e-04  setup   14.3 s
+[mem] r1-ort-exh-graph-resnet50-1-0-tf32 835 148
+r1 [gsweep] ort     exh-graph      resnet50_b1      tf32 host     1.189 ms (p10    1.183 p90    1.197)  dev     1.091 ms  err 1.2e-04  setup    0.4 s
+[mem] r1-pytorch-compile-ro-resnet50-1-0-fp16 925 148
+r1 [gsweep] pytorch compile-ro     resnet50_b1      fp16 host     1.211 ms (p10    1.206 p90    1.223)  dev     1.065 ms  err 7.7e-04  setup   14.5 s
+[mem] r1-ort-exh-graph-resnet50-1-0-fp16 949 148
+r1 [gsweep] ort     exh-graph      resnet50_b1      fp16 host     0.942 ms (p10    0.938 p90    0.945)  dev     0.879 ms  err 5.3e-04  setup    6.4 s
+[mem] r1-pytorch-compile-resnet50-32-0-fp32 6669 148
+r1 [gsweep] pytorch compile        resnet50_b32     fp32 host    20.137 ms (p10   20.117 p90   20.150)  dev    18.515 ms  err 2.1e-07  setup 1069.5 s
+[mem] r1-ort-exh-graph-resnet50-32-0-fp32 1811 148
+r1 [gsweep] ort     exh-graph      resnet50_b32     fp32 host    19.627 ms (p10   19.469 p90   19.950)  dev    18.444 ms  err 4.2e-07  setup    6.1 s
+[mem] r1-pytorch-compile-ro-resnet50-32-0-tf32 9395 148
+r1 [gsweep] pytorch compile-ro     resnet50_b32     tf32 host     8.297 ms (p10    8.286 p90    8.322)  dev     6.809 ms  err 3.3e-04  setup   14.0 s
+[mem] r1-ort-exh-graph-resnet50-32-0-tf32 1815 148
+r1 [gsweep] ort     exh-graph      resnet50_b32     tf32 host     9.580 ms (p10    9.547 p90    9.603)  dev     8.314 ms  err 3.5e-04  setup    0.4 s
+[mem] r1-pytorch-compile-resnet50-32-0-fp16 4057 148
+r1 [gsweep] pytorch compile        resnet50_b32     fp16 host     4.412 ms (p10    4.405 p90    4.426)  dev     3.669 ms  err 7.6e-04  setup   75.9 s
+[mem] r1-ort-exh-graph-resnet50-32-0-fp16 1443 148
+r1 [gsweep] ort     exh-graph      resnet50_b32     fp16 host     5.452 ms (p10    5.416 p90    5.470)  dev     4.800 ms  err 7.1e-04  setup    6.4 s
+[mem] r1-pytorch-compile-resnet50-128-0-fp32 8167 148
+r1 [gsweep] pytorch compile        resnet50_b128    fp32 host    70.811 ms (p10   70.626 p90   70.994)  dev    65.498 ms  err 2.6e-07  setup 1019.2 s
+[mem] r1-ort-exh-graph-resnet50-128-0-fp32 7211 148
+r1 [gsweep] ort     exh-graph      resnet50_b128    fp32 host    78.405 ms (p10   78.075 p90   78.781)  dev    73.110 ms  err 7.1e-07  setup    6.3 s
+[mem] r1-pytorch-compile-ro-resnet50-128-0-tf32 11841 148
+r1 [gsweep] pytorch compile-ro     resnet50_b128    tf32 host    29.924 ms (p10   29.801 p90   30.379)  dev    24.541 ms  err 3.5e-04  setup   13.8 s
+[mem] r1-ort-exh-graph-resnet50-128-0-tf32 5163 148
+r1 [gsweep] ort     exh-graph      resnet50_b128    tf32 host    35.639 ms (p10   35.447 p90   36.033)  dev    30.068 ms  err 3.6e-04  setup    0.5 s
+[mem] r1-pytorch-compile-resnet50-128-0-fp16 4873 148
+r1 [gsweep] pytorch compile        resnet50_b128    fp16 host    14.098 ms (p10   14.027 p90   14.217)  dev    11.611 ms  err 8.4e-04  setup   83.7 s
+[mem] r1-ort-exh-graph-resnet50-128-0-fp16 3097 148
+r1 [gsweep] ort     exh-graph      resnet50_b128    fp16 host    20.422 ms (p10   20.253 p90   20.774)  dev    17.914 ms  err 8.5e-04  setup    6.5 s
+[mem] r1-pytorch-compile-ro-bert-1-128-fp32 1215 148
+r1 [gsweep] pytorch compile-ro     bert_b1_s128     fp32 host     2.926 ms (p10    2.921 p90    2.932)  dev     2.797 ms  err 6.3e-07  setup    8.8 s
+[mem] r1-ort-opt-exh-bert-1-128-fp32 1583 148
+r1 [gsweep] fused ops {'EmbedLayerNormalization': 0, 'Attention': 0, 'MultiHeadAttention': 0, 'Gelu': 12, 'FastGelu': 0, 'BiasGelu': 0, 'GemmFastGelu': 0, 'LayerNormalization': 1, 'SimplifiedLayerNormalization': 0, 'SkipLayerNormalization': 24, 'SkipSimplifiedLayerNormalization': 0, 'RotaryEmbedding': 0, 'QOrderedAttention': 0, 'QOrderedGelu': 0, 'QOrderedLayerNormalization': 0, 'QOrderedMatMul': 0}
+r1 [gsweep] ort     opt-exh        bert_b1_s128     fp32 host     3.414 ms (p10    3.407 p90    3.419)  dev     3.304 ms  err 5.7e-07  setup   11.1 s
+[mem] r1-pytorch-compile-ro-bert-1-128-tf32 1175 148
+r1 [gsweep] pytorch compile-ro     bert_b1_s128     tf32 host     1.507 ms (p10    1.503 p90    1.516)  dev     1.377 ms  err 3.3e-04  setup    8.9 s
+[mem] r1-ort-opt-exh-bert-1-128-tf32 1607 148
+r1 [gsweep] ort     opt-exh        bert_b1_s128     tf32 host     2.454 ms (p10    2.390 p90    2.489)  dev     2.326 ms  err 3.3e-04  setup    0.6 s
+[mem] r1-pytorch-compile-bert-1-128-fp16 1637 148
+r1 [gsweep] pytorch compile        bert_b1_s128     fp16 host     1.223 ms (p10    1.219 p90    1.233)  dev     1.108 ms  err 2.3e-03  setup   22.5 s
+[mem] r1-ort-opt-exh-bert-1-128-fp16 1935 148
+r1 [gsweep] fused ops {'EmbedLayerNormalization': 0, 'Attention': 0, 'MultiHeadAttention': 0, 'Gelu': 12, 'FastGelu': 0, 'BiasGelu': 0, 'GemmFastGelu': 0, 'LayerNormalization': 1, 'SimplifiedLayerNormalization': 0, 'SkipLayerNormalization': 24, 'SkipSimplifiedLayerNormalization': 0, 'RotaryEmbedding': 0, 'QOrderedAttention': 0, 'QOrderedGelu': 0, 'QOrderedLayerNormalization': 0, 'QOrderedMatMul': 0}
+r1 [gsweep] ort     opt-exh        bert_b1_s128     fp16 host     2.472 ms (p10    2.445 p90    2.496)  dev     2.372 ms  err 2.6e-03  setup    9.8 s
+[mem] r1-pytorch-compile-ro-bert-32-128-fp32 1389 148
+r1 [gsweep] pytorch compile-ro     bert_b32_s128    fp32 host    45.736 ms (p10   45.375 p90   46.216)  dev    44.641 ms  err 1.1e-06  setup    9.3 s
+[mem] r1-ort-opt-exh-bert-32-128-fp32 2097 148
+r1 [gsweep] fused ops {'EmbedLayerNormalization': 0, 'Attention': 0, 'MultiHeadAttention': 0, 'Gelu': 12, 'FastGelu': 0, 'BiasGelu': 0, 'GemmFastGelu': 0, 'LayerNormalization': 1, 'SimplifiedLayerNormalization': 0, 'SkipLayerNormalization': 24, 'SkipSimplifiedLayerNormalization': 0, 'RotaryEmbedding': 0, 'QOrderedAttention': 0, 'QOrderedGelu': 0, 'QOrderedLayerNormalization': 0, 'QOrderedMatMul': 0}
+r1 [gsweep] ort     opt-exh        bert_b32_s128    fp32 host    50.035 ms (p10   49.800 p90   50.097)  dev    48.931 ms  err 1.2e-06  setup   11.3 s
+[mem] r1-pytorch-compile-bert-32-128-tf32 1395 148
+r1 [gsweep] pytorch compile        bert_b32_s128    tf32 host    10.956 ms (p10   10.826 p90   11.441)  dev    10.041 ms  err 9.0e-04  setup   40.4 s
+[mem] r1-ort-opt-exh-bert-32-128-tf32 2099 148
+r1 [gsweep] ort     opt-exh        bert_b32_s128    tf32 host    14.020 ms (p10   13.930 p90   14.081)  dev    13.275 ms  err 3.7e-04  setup    0.6 s
+[mem] r1-pytorch-compile-bert-32-128-fp16 1659 148
+r1 [gsweep] pytorch compile        bert_b32_s128    fp16 host     5.826 ms (p10    5.806 p90    5.851)  dev     5.383 ms  err 2.3e-03  setup   30.1 s
+[mem] r1-ort-opt-exh-bert-32-128-fp16 2157 148
+r1 [gsweep] fused ops {'EmbedLayerNormalization': 0, 'Attention': 0, 'MultiHeadAttention': 0, 'Gelu': 12, 'FastGelu': 0, 'BiasGelu': 0, 'GemmFastGelu': 0, 'LayerNormalization': 1, 'SimplifiedLayerNormalization': 0, 'SkipLayerNormalization': 24, 'SkipSimplifiedLayerNormalization': 0, 'RotaryEmbedding': 0, 'QOrderedAttention': 0, 'QOrderedGelu': 0, 'QOrderedLayerNormalization': 0, 'QOrderedMatMul': 0}
+r1 [gsweep] ort     opt-exh        bert_b32_s128    fp16 host     8.648 ms (p10    8.555 p90    8.656)  dev     8.157 ms  err 3.2e-03  setup   10.0 s
+[mem] r1-pytorch-compile-ro-bert-8-512-fp32 1299 148
+r1 [gsweep] pytorch compile-ro     bert_b8_s512     fp32 host    48.920 ms (p10   48.474 p90   49.263)  dev    47.675 ms  err 1.1e-06  setup    9.2 s
+[mem] r1-ort-opt-exh-bert-8-512-fp32 2095 148
+r1 [gsweep] fused ops {'EmbedLayerNormalization': 0, 'Attention': 0, 'MultiHeadAttention': 0, 'Gelu': 12, 'FastGelu': 0, 'BiasGelu': 0, 'GemmFastGelu': 0, 'LayerNormalization': 1, 'SimplifiedLayerNormalization': 0, 'SkipLayerNormalization': 24, 'SkipSimplifiedLayerNormalization': 0, 'RotaryEmbedding': 0, 'QOrderedAttention': 0, 'QOrderedGelu': 0, 'QOrderedLayerNormalization': 0, 'QOrderedMatMul': 0}
+r1 [gsweep] ort     opt-exh        bert_b8_s512     fp32 host    56.299 ms (p10   55.923 p90   56.503)  dev    55.339 ms  err 1.2e-06  setup   11.1 s
+[mem] r1-pytorch-compile-ro-bert-8-512-tf32 1281 148
+r1 [gsweep] pytorch compile-ro     bert_b8_s512     tf32 host    14.572 ms (p10   14.318 p90   14.845)  dev    13.451 ms  err 3.6e-04  setup    9.7 s
+[mem] r1-ort-opt-exh-bert-8-512-tf32 2093 148
+r1 [gsweep] ort     opt-exh        bert_b8_s512     tf32 host    16.650 ms (p10   16.573 p90   16.964)  dev    15.809 ms  err 3.5e-04  setup    0.6 s
+[mem] r1-pytorch-compile-ro-bert-8-512-fp16 1617 148
+r1 [gsweep] pytorch compile-ro     bert_b8_s512     fp16 host     6.121 ms (p10    6.084 p90    6.179)  dev     5.636 ms  err 2.3e-03  setup    9.4 s
+[mem] r1-ort-opt-exh-bert-8-512-fp16 2159 148
+r1 [gsweep] fused ops {'EmbedLayerNormalization': 0, 'Attention': 0, 'MultiHeadAttention': 0, 'Gelu': 12, 'FastGelu': 0, 'BiasGelu': 0, 'GemmFastGelu': 0, 'LayerNormalization': 1, 'SimplifiedLayerNormalization': 0, 'SkipLayerNormalization': 24, 'SkipSimplifiedLayerNormalization': 0, 'RotaryEmbedding': 0, 'QOrderedAttention': 0, 'QOrderedGelu': 0, 'QOrderedLayerNormalization': 0, 'QOrderedMatMul': 0}
+r1 [gsweep] ort     opt-exh        bert_b8_s512     fp16 host    10.094 ms (p10   10.084 p90   10.106)  dev     9.727 ms  err 3.6e-03  setup    9.9 s
+[mem] r1-jtrain-strict-k 5317 148
+r1 strict-k [model] resnet50_cifar_train_b32     median    31.694 ms/step  p10    31.065  p90    33.196
+r1 strict-k [model] gpt2_train_b8_s256           median   140.717 ms/step  p10   139.940  p90   141.173
+r1 strict-k [model] bert_train_b8_s128           median    55.748 ms/step  p10    55.522  p90    55.887
+[mem] r1-jtrain-strict-n 5359 148
+r1 strict-n [model] resnet50_cifar_train_b32     median    31.620 ms/step  p10    30.987  p90    33.797
+r1 strict-n [model] gpt2_train_b8_s256           median   106.606 ms/step  p10   106.104  p90   107.228
+r1 strict-n [model] bert_train_b8_s128           median    41.638 ms/step  p10    41.382  p90    41.880
+[mem] r1-jtrain-tf32 5361 148
+r1 tf32 [model] resnet50_cifar_train_b32     median    17.148 ms/step  p10    16.095  p90    18.968
+r1 tf32 [model] gpt2_train_b8_s256           median    36.745 ms/step  p10    36.462  p90    37.819
+r1 tf32 [model] bert_train_b8_s128           median    15.800 ms/step  p10    15.731  p90    16.518
+[mem] r1-ptrain-eager-resnet50_cifar_train_b32-fp32 2795 148
+r1 [gtrain] pytorch eager      resnet50_cifar_train_b32   fp32     31.21 ms/step (p10    31.17 p90    31.35)  loss0 2.4637  setup    1.7 s
+[mem] r1-ptrain-compile-ro-resnet50_cifar_train_b32-tf32 8521 148
+r1 [gtrain] pytorch compile-ro resnet50_cifar_train_b32   tf32     11.03 ms/step (p10    11.02 p90    11.04)  loss0 2.4647  setup   38.9 s
+[mem] r1-ptrain-compile-ma-bert_train_b8_s128-fp32 6057 148
+r1 [gtrain] pytorch compile-ma bert_train_b8_s128         fp32     37.98 ms/step (p10    37.96 p90    37.99)  loss0 1.0000  setup  311.0 s
+[mem] r1-ptrain-compile-ro-bert_train_b8_s128-tf32 2863 148
+r1 [gtrain] pytorch compile-ro bert_train_b8_s128         tf32     11.97 ms/step (p10    11.94 p90    11.99)  loss0 1.0000  setup   17.4 s
+[mem] r1-ptrain-compile-ma-gpt2_train_b8_s256-fp32 7711 148
+r1 [gtrain] pytorch compile-ma gpt2_train_b8_s256         fp32     99.54 ms/step (p10    99.07 p90    99.77)  loss0 10.9700  setup  435.1 s
+[mem] r1-ptrain-compile-ma-gpt2_train_b8_s256-tf32 4573 148
+r1 [gtrain] pytorch compile-ma gpt2_train_b8_s256         tf32     26.99 ms/step (p10    26.78 p90    27.17)  loss0 10.9698  setup  129.8 s
+[mem] r2-jitnn-strict-k-all 14393 148
+r2 strict-k [inference] jitnn resnet50_b1_fp32             median    2.813 ms  p10    2.655  p90    3.431       355.5 samples/s  (first call 4715 ms)
+r2 strict-k [inference] jitnn resnet50_b32_fp32            median   24.343 ms  p10   24.076  p90   24.593      1314.6 samples/s  (first call 3028 ms)
+r2 strict-k [inference] jitnn resnet50_b128_fp32           median   84.173 ms  p10   83.963  p90   84.440      1520.7 samples/s  (first call 6101 ms)
+r2 strict-k [inference] jitnn resnet50_b1_fp16h            median    2.623 ms  p10    2.556  p90    2.696       381.2 samples/s  (first call 1184 ms)
+r2 strict-k [inference] jitnn resnet50_b32_fp16h           median   22.742 ms  p10   22.455  p90   22.944      1407.1 samples/s  (first call 756 ms)
+r2 strict-k [inference] jitnn resnet50_b128_fp16h          median   81.663 ms  p10   81.427  p90   81.909      1567.4 samples/s  (first call 1258 ms)
+r2 strict-k [inference] jitnn bert_b1_s128_fp32            median    4.507 ms  p10    4.483  p90    4.671       221.9 samples/s  (first call 1027 ms)
+r2 strict-k [inference] jitnn bert_b32_s128_fp32           median   60.810 ms  p10   60.538  p90   61.153       526.2 samples/s  (first call 2018 ms)
+r2 strict-k [inference] jitnn bert_b8_s512_fp32            median   67.144 ms  p10   66.694  p90   67.739       119.1 samples/s  (first call 283 ms)
+r2 strict-k [inference] jitnn bert_b1_s128_fp16            median    2.988 ms  p10    2.982  p90    3.032       334.7 samples/s  (first call 1716 ms)
+r2 strict-k [inference] jitnn bert_b32_s128_fp16           median   18.750 ms  p10   18.615  p90   18.876      1706.7 samples/s  (first call 1015 ms)
+r2 strict-k [inference] jitnn bert_b8_s512_fp16            median   24.978 ms  p10   24.753  p90   25.194       320.3 samples/s  (first call 157 ms)
+r2 strict-k [inference] jitnn bert_b1_s128_fp16h           median    2.971 ms  p10    2.951  p90    3.063       336.6 samples/s  (first call 2633 ms)
+r2 strict-k [inference] jitnn bert_b32_s128_fp16h          median   16.493 ms  p10   16.473  p90   16.567      1940.2 samples/s  (first call 1549 ms)
+r2 strict-k [inference] jitnn bert_b8_s512_fp16h           median   18.629 ms  p10   18.617  p90   18.650       429.4 samples/s  (first call 1173 ms)
+[mem] r2-jitnn-strict-n-all 10597 148
+r2 strict-n [inference] jitnn resnet50_b1_fp32             median    2.736 ms  p10    2.543  p90    3.275       365.5 samples/s  (first call 4337 ms)
+r2 strict-n [inference] jitnn resnet50_b32_fp32            median   24.612 ms  p10   24.425  p90   24.952      1300.2 samples/s  (first call 1884 ms)
+r2 strict-n [inference] jitnn resnet50_b128_fp32           median   84.173 ms  p10   83.944  p90   84.527      1520.7 samples/s  (first call 2197 ms)
+r2 strict-n [inference] jitnn resnet50_b1_fp16h            median    1.307 ms  p10    1.236  p90    1.404       765.2 samples/s  (first call 919 ms)
+r2 strict-n [inference] jitnn resnet50_b32_fp16h           median    5.971 ms  p10    5.831  p90    6.093      5358.8 samples/s  (first call 489 ms)
+r2 strict-n [inference] jitnn resnet50_b128_fp16h          median   17.444 ms  p10   17.294  p90   17.700      7337.9 samples/s  (first call 322 ms)
+r2 strict-n [inference] jitnn bert_b1_s128_fp32            median    3.582 ms  p10    3.472  p90    3.685       279.2 samples/s  (first call 346 ms)
+r2 strict-n [inference] jitnn bert_b32_s128_fp32           median   49.317 ms  p10   49.091  p90   49.415       648.9 samples/s  (first call 277 ms)
+r2 strict-n [inference] jitnn bert_b8_s512_fp32            median   55.771 ms  p10   55.285  p90   55.948       143.4 samples/s  (first call 267 ms)
+r2 strict-n [inference] jitnn bert_b1_s128_fp16            median    1.969 ms  p10    1.955  p90    2.005       508.0 samples/s  (first call 267 ms)
+r2 strict-n [inference] jitnn bert_b32_s128_fp16           median   12.473 ms  p10   12.370  p90   12.630      2565.6 samples/s  (first call 242 ms)
+r2 strict-n [inference] jitnn bert_b8_s512_fp16            median   18.611 ms  p10   18.506  p90   18.687       429.9 samples/s  (first call 246 ms)
+r2 strict-n [inference] jitnn bert_b1_s128_fp16h           median    1.143 ms  p10    1.108  p90    1.195       875.2 samples/s  (first call 249 ms)
+r2 strict-n [inference] jitnn bert_b32_s128_fp16h          median    5.809 ms  p10    5.600  p90    5.854      5508.6 samples/s  (first call 638 ms)
+r2 strict-n [inference] jitnn bert_b8_s512_fp16h           median    6.235 ms  p10    6.220  p90    6.331      1283.1 samples/s  (first call 137 ms)
+[mem] r2-jitnn-tf32-all 8717 148
+r2 tf32 [inference] jitnn resnet50_b1_fp32             median    2.172 ms  p10    1.969  p90    2.536       460.4 samples/s  (first call 2181 ms)
+r2 tf32 [inference] jitnn resnet50_b32_fp32            median   10.824 ms  p10   10.592  p90   11.238      2956.4 samples/s  (first call 377 ms)
+r2 tf32 [inference] jitnn resnet50_b128_fp32           median   31.937 ms  p10   31.488  p90   32.372      4007.9 samples/s  (first call 369 ms)
+r2 tf32 [inference] jitnn resnet50_b1_fp16h            median    1.190 ms  p10    1.103  p90    1.253       840.5 samples/s  (first call 861 ms)
+r2 tf32 [inference] jitnn resnet50_b32_fp16h           median    6.066 ms  p10    5.983  p90    6.209      5275.6 samples/s  (first call 224 ms)
+r2 tf32 [inference] jitnn resnet50_b128_fp16h          median   17.454 ms  p10   17.244  p90   17.698      7333.4 samples/s  (first call 282 ms)
+r2 tf32 [inference] jitnn bert_b1_s128_fp32            median    2.192 ms  p10    2.127  p90    2.331       456.1 samples/s  (first call 369 ms)
+r2 tf32 [inference] jitnn bert_b32_s128_fp32           median   14.402 ms  p10   14.332  p90   14.606      2221.9 samples/s  (first call 181 ms)
+r2 tf32 [inference] jitnn bert_b8_s512_fp32            median   20.665 ms  p10   20.365  p90   20.840       387.1 samples/s  (first call 265 ms)
+r2 tf32 [inference] jitnn bert_b1_s128_fp16            median    1.962 ms  p10    1.954  p90    1.997       509.7 samples/s  (first call 271 ms)
+r2 tf32 [inference] jitnn bert_b32_s128_fp16           median   12.496 ms  p10   12.401  p90   12.710      2560.7 samples/s  (first call 258 ms)
+r2 tf32 [inference] jitnn bert_b8_s512_fp16            median   18.715 ms  p10   18.601  p90   18.896       427.5 samples/s  (first call 258 ms)
+r2 tf32 [inference] jitnn bert_b1_s128_fp16h           median    1.163 ms  p10    1.113  p90    1.219       859.7 samples/s  (first call 265 ms)
+r2 tf32 [inference] jitnn bert_b32_s128_fp16h          median    5.813 ms  p10    5.647  p90    5.911      5504.7 samples/s  (first call 612 ms)
+r2 tf32 [inference] jitnn bert_b8_s512_fp16h           median    6.263 ms  p10    6.225  p90    6.292      1277.3 samples/s  (first call 138 ms)
+[mem] r2-ort-exh-graph-resnet50-1-0-fp32 965 148
+r2 [gsweep] ort     exh-graph      resnet50_b1      fp32 host     3.347 ms (p10    3.339 p90    3.358)  dev     3.246 ms  err 3.7e-07  setup    0.4 s
+[mem] r2-pytorch-compile-ro-resnet50-1-0-fp32 10009 148
+r2 [gsweep] pytorch compile-ro     resnet50_b1      fp32 host     4.435 ms (p10    4.424 p90    4.447)  dev     4.264 ms  err 2.1e-07  setup    4.8 s
+[mem] r2-ort-exh-graph-resnet50-1-0-tf32 837 148
+r2 [gsweep] ort     exh-graph      resnet50_b1      tf32 host     1.182 ms (p10    1.174 p90    1.189)  dev     1.090 ms  err 1.2e-04  setup    0.4 s
+[mem] r2-pytorch-compile-ro-resnet50-1-0-tf32 10009 148
+r2 [gsweep] pytorch compile-ro     resnet50_b1      tf32 host     1.763 ms (p10    1.753 p90    1.773)  dev     1.574 ms  err 2.0e-04  setup    5.6 s
+[mem] r2-ort-exh-graph-resnet50-1-0-fp16 1013 148
+r2 [gsweep] ort     exh-graph      resnet50_b1      fp16 host     0.940 ms (p10    0.936 p90    0.949)  dev     0.877 ms  err 5.3e-04  setup    0.6 s
+[mem] r2-pytorch-compile-ro-resnet50-1-0-fp16 885 148
+r2 [gsweep] pytorch compile-ro     resnet50_b1      fp16 host     1.281 ms (p10    1.277 p90    1.290)  dev     1.131 ms  err 7.7e-04  setup    5.7 s
+[mem] r2-ort-exh-graph-resnet50-32-0-fp32 1813 148
+r2 [gsweep] ort     exh-graph      resnet50_b32     fp32 host    20.183 ms (p10   20.086 p90   20.508)  dev    18.794 ms  err 4.2e-07  setup    0.5 s
+[mem] r2-pytorch-compile-resnet50-32-0-fp32 3291 148
+r2 [gsweep] pytorch compile        resnet50_b32     fp32 host    20.318 ms (p10   20.186 p90   20.603)  dev    18.821 ms  err 2.1e-07  setup    5.9 s
+[mem] r2-ort-exh-graph-resnet50-32-0-tf32 1813 148
+r2 [gsweep] ort     exh-graph      resnet50_b32     tf32 host     9.724 ms (p10    9.638 p90    9.775)  dev     8.455 ms  err 3.5e-04  setup    0.4 s
+[mem] r2-pytorch-compile-ro-resnet50-32-0-tf32 9297 148
+r2 [gsweep] pytorch compile-ro     resnet50_b32     tf32 host     8.419 ms (p10    8.396 p90    8.544)  dev     6.889 ms  err 3.3e-04  setup    5.6 s
+[mem] r2-ort-exh-graph-resnet50-32-0-fp16 1449 148
+r2 [gsweep] ort     exh-graph      resnet50_b32     fp16 host     5.533 ms (p10    5.499 p90    5.562)  dev     4.878 ms  err 7.1e-04  setup    0.6 s
+[mem] r2-pytorch-compile-resnet50-32-0-fp16 1063 148
+r2 [gsweep] pytorch compile        resnet50_b32     fp16 host     4.494 ms (p10    4.482 p90    4.508)  dev     3.691 ms  err 7.6e-04  setup    4.9 s
+[mem] r2-ort-exh-graph-resnet50-128-0-fp32 7211 148
+r2 [gsweep] ort     exh-graph      resnet50_b128    fp32 host    78.894 ms (p10   78.571 p90   79.274)  dev    74.231 ms  err 7.1e-07  setup    0.7 s
+[mem] r2-pytorch-compile-resnet50-128-0-fp32 5335 148
+r2 [gsweep] pytorch compile        resnet50_b128    fp32 host    72.304 ms (p10   71.916 p90   72.606)  dev    67.221 ms  err 2.6e-07  setup   10.0 s
+[mem] r2-ort-exh-graph-resnet50-128-0-tf32 5161 148
+r2 [gsweep] ort     exh-graph      resnet50_b128    tf32 host    35.766 ms (p10   35.545 p90   36.077)  dev    30.554 ms  err 3.6e-04  setup    0.5 s
+[mem] r2-pytorch-compile-ro-resnet50-128-0-tf32 11841 148
+r2 [gsweep] pytorch compile-ro     resnet50_b128    tf32 host    30.406 ms (p10   30.005 p90   31.079)  dev    24.947 ms  err 3.5e-04  setup    5.8 s
+[mem] r2-ort-exh-graph-resnet50-128-0-fp16 3097 148
+r2 [gsweep] ort     exh-graph      resnet50_b128    fp16 host    20.691 ms (p10   20.308 p90   21.148)  dev    18.252 ms  err 8.5e-04  setup    0.6 s
+[mem] r2-pytorch-compile-resnet50-128-0-fp16 2059 148
+r2 [gsweep] pytorch compile        resnet50_b128    fp16 host    14.656 ms (p10   14.523 p90   14.864)  dev    11.703 ms  err 8.4e-04  setup    5.7 s
+[mem] r2-ort-opt-exh-bert-1-128-fp32 1583 148
+r2 [gsweep] ort     opt-exh        bert_b1_s128     fp32 host     3.412 ms (p10    3.409 p90    3.419)  dev     3.306 ms  err 5.7e-07  setup    0.7 s
+[mem] r2-pytorch-compile-ro-bert-1-128-fp32 1175 148
+r2 [gsweep] pytorch compile-ro     bert_b1_s128     fp32 host     2.902 ms (p10    2.897 p90    2.913)  dev     2.780 ms  err 6.3e-07  setup    3.6 s
+[mem] r2-ort-opt-exh-bert-1-128-tf32 1589 148
+r2 [gsweep] ort     opt-exh        bert_b1_s128     tf32 host     2.511 ms (p10    2.494 p90    2.532)  dev     2.405 ms  err 3.3e-04  setup    0.6 s
+[mem] r2-pytorch-compile-ro-bert-1-128-tf32 1175 148
+r2 [gsweep] pytorch compile-ro     bert_b1_s128     tf32 host     1.452 ms (p10    1.446 p90    1.460)  dev     1.339 ms  err 3.3e-04  setup    3.5 s
+[mem] r2-ort-opt-exh-bert-1-128-fp16 1903 148
+r2 [gsweep] ort     opt-exh        bert_b1_s128     fp16 host     2.313 ms (p10    2.293 p90    2.339)  dev     2.229 ms  err 2.6e-03  setup    0.7 s
+[mem] r2-pytorch-compile-bert-1-128-fp16 1617 148
+r2 [gsweep] pytorch compile        bert_b1_s128     fp16 host     1.112 ms (p10    1.108 p90    1.118)  dev     1.020 ms  err 2.3e-03  setup    3.8 s
+[mem] r2-ort-opt-exh-bert-32-128-fp32 2093 148
+r2 [gsweep] ort     opt-exh        bert_b32_s128    fp32 host    50.218 ms (p10   49.965 p90   50.600)  dev    49.386 ms  err 1.2e-06  setup    0.7 s
+[mem] r2-pytorch-compile-ro-bert-32-128-fp32 1281 148
+r2 [gsweep] pytorch compile-ro     bert_b32_s128    fp32 host    46.399 ms (p10   46.068 p90   46.939)  dev    45.122 ms  err 1.1e-06  setup    3.6 s
+[mem] r2-ort-opt-exh-bert-32-128-tf32 2101 148
+r2 [gsweep] ort     opt-exh        bert_b32_s128    tf32 host    14.242 ms (p10   14.126 p90   14.329)  dev    13.474 ms  err 3.7e-04  setup    0.6 s
+[mem] r2-pytorch-compile-bert-32-128-tf32 1281 148
+r2 [gsweep] pytorch compile        bert_b32_s128    tf32 host    11.013 ms (p10   10.919 p90   11.591)  dev    10.098 ms  err 9.0e-04  setup    3.8 s
+[mem] r2-ort-opt-exh-bert-32-128-fp16 2157 148
+r2 [gsweep] ort     opt-exh        bert_b32_s128    fp16 host     8.666 ms (p10    8.658 p90    8.679)  dev     8.225 ms  err 3.2e-03  setup    0.7 s
+[mem] r2-pytorch-compile-bert-32-128-fp16 1617 148
+r2 [gsweep] pytorch compile        bert_b32_s128    fp16 host     5.845 ms (p10    5.774 p90    5.989)  dev     5.386 ms  err 2.3e-03  setup    3.7 s
+[mem] r2-ort-opt-exh-bert-8-512-fp32 2101 148
+r2 [gsweep] ort     opt-exh        bert_b8_s512     fp32 host    56.415 ms (p10   56.174 p90   56.431)  dev    55.655 ms  err 1.2e-06  setup    0.7 s
+[mem] r2-pytorch-compile-ro-bert-8-512-fp32 1281 148
+r2 [gsweep] pytorch compile-ro     bert_b8_s512     fp32 host    49.758 ms (p10   49.314 p90   50.244)  dev    48.247 ms  err 1.1e-06  setup    3.8 s
+[mem] r2-ort-opt-exh-bert-8-512-tf32 2095 148
+r2 [gsweep] ort     opt-exh        bert_b8_s512     tf32 host    16.713 ms (p10   16.625 p90   16.948)  dev    15.917 ms  err 3.5e-04  setup    0.7 s
+[mem] r2-pytorch-compile-ro-bert-8-512-tf32 1281 148
+r2 [gsweep] pytorch compile-ro     bert_b8_s512     tf32 host    14.829 ms (p10   14.506 p90   15.142)  dev    13.534 ms  err 3.6e-04  setup    3.7 s
+[mem] r2-ort-opt-exh-bert-8-512-fp16 2159 148
+r2 [gsweep] ort     opt-exh        bert_b8_s512     fp16 host    10.180 ms (p10   10.170 p90   10.262)  dev     9.775 ms  err 3.6e-03  setup    0.7 s
+[mem] r2-pytorch-compile-ro-bert-8-512-fp16 1617 148
+r2 [gsweep] pytorch compile-ro     bert_b8_s512     fp16 host     6.118 ms (p10    6.080 p90    6.214)  dev     5.654 ms  err 2.3e-03  setup    3.7 s
+[mem] r2-jtrain-strict-k 5317 148
+r2 strict-k [model] resnet50_cifar_train_b32     median    31.810 ms/step  p10    31.179  p90    33.237
+r2 strict-k [model] gpt2_train_b8_s256           median   140.707 ms/step  p10   140.096  p90   141.263
+r2 strict-k [model] bert_train_b8_s128           median    55.642 ms/step  p10    55.552  p90    55.986
+[mem] r2-jtrain-strict-n 5359 148
+r2 strict-n [model] resnet50_cifar_train_b32     median    31.692 ms/step  p10    30.995  p90    33.623
+r2 strict-n [model] gpt2_train_b8_s256           median   107.070 ms/step  p10   106.760  p90   107.700
+r2 strict-n [model] bert_train_b8_s128           median    41.634 ms/step  p10    41.482  p90    41.949
+[mem] r2-jtrain-tf32 5361 148
+r2 tf32 [model] resnet50_cifar_train_b32     median    17.359 ms/step  p10    15.901  p90    18.365
+r2 tf32 [model] gpt2_train_b8_s256           median    37.013 ms/step  p10    36.491  p90    38.212
+r2 tf32 [model] bert_train_b8_s128           median    16.026 ms/step  p10    15.933  p90    16.117
+[mem] r2-ptrain-eager-resnet50_cifar_train_b32-fp32 2795 148
+r2 [gtrain] pytorch eager      resnet50_cifar_train_b32   fp32     31.20 ms/step (p10    31.13 p90    31.29)  loss0 2.4637  setup    1.7 s
+[mem] r2-ptrain-compile-ro-resnet50_cifar_train_b32-tf32 8521 148
+r2 [gtrain] pytorch compile-ro resnet50_cifar_train_b32   tf32     11.32 ms/step (p10    11.08 p90    11.36)  loss0 2.4647  setup    4.2 s
+[mem] r2-ptrain-compile-ma-bert_train_b8_s128-fp32 2789 148
+r2 [gtrain] pytorch compile-ma bert_train_b8_s128         fp32     38.47 ms/step (p10    38.15 p90    38.76)  loss0 1.0000  setup    2.1 s
+[mem] r2-ptrain-compile-ro-bert_train_b8_s128-tf32 2913 148
+r2 [gtrain] pytorch compile-ro bert_train_b8_s128         tf32     12.07 ms/step (p10    12.02 p90    12.28)  loss0 1.0000  setup    1.8 s
+[mem] r2-ptrain-compile-ma-gpt2_train_b8_s256-fp32 4203 148
+r2 [gtrain] pytorch compile-ma gpt2_train_b8_s256         fp32     99.31 ms/step (p10    98.95 p90    99.66)  loss0 10.9700  setup    2.2 s
+[mem] r2-ptrain-compile-ma-gpt2_train_b8_s256-tf32 4201 148
+r2 [gtrain] pytorch compile-ma gpt2_train_b8_s256         tf32     26.99 ms/step (p10    26.79 p90    27.10)  loss0 10.9698  setup    2.2 s
+[mem] r3-jitnn-strict-k-all 14393 148
+r3 strict-k [inference] jitnn resnet50_b1_fp32             median    2.829 ms  p10    2.665  p90    3.410       353.5 samples/s  (first call 4702 ms)
+r3 strict-k [inference] jitnn resnet50_b32_fp32            median   24.259 ms  p10   23.979  p90   24.454      1319.1 samples/s  (first call 3056 ms)
+r3 strict-k [inference] jitnn resnet50_b128_fp32           median   84.081 ms  p10   83.775  p90   84.406      1522.3 samples/s  (first call 2368 ms)
+r3 strict-k [inference] jitnn resnet50_b1_fp16h            median    2.568 ms  p10    2.497  p90    2.630       389.5 samples/s  (first call 419 ms)
+r3 strict-k [inference] jitnn resnet50_b32_fp16h           median   22.713 ms  p10   22.376  p90   22.958      1408.9 samples/s  (first call 382 ms)
+r3 strict-k [inference] jitnn resnet50_b128_fp16h          median   81.531 ms  p10   81.350  p90   81.776      1570.0 samples/s  (first call 836 ms)
+r3 strict-k [inference] jitnn bert_b1_s128_fp32            median    4.571 ms  p10    4.455  p90    4.948       218.8 samples/s  (first call 451 ms)
+r3 strict-k [inference] jitnn bert_b32_s128_fp32           median   61.043 ms  p10   60.635  p90   61.411       524.2 samples/s  (first call 1119 ms)
+r3 strict-k [inference] jitnn bert_b8_s512_fp32            median   67.314 ms  p10   67.213  p90   67.382       118.8 samples/s  (first call 275 ms)
+r3 strict-k [inference] jitnn bert_b1_s128_fp16            median    2.952 ms  p10    2.945  p90    2.980       338.7 samples/s  (first call 417 ms)
+r3 strict-k [inference] jitnn bert_b32_s128_fp16           median   18.703 ms  p10   18.553  p90   18.817      1711.0 samples/s  (first call 191 ms)
+r3 strict-k [inference] jitnn bert_b8_s512_fp16            median   24.962 ms  p10   24.906  p90   25.091       320.5 samples/s  (first call 151 ms)
+r3 strict-k [inference] jitnn bert_b1_s128_fp16h           median    2.931 ms  p10    2.916  p90    2.975       341.2 samples/s  (first call 766 ms)
+r3 strict-k [inference] jitnn bert_b32_s128_fp16h          median   16.451 ms  p10   16.418  p90   16.518      1945.2 samples/s  (first call 864 ms)
+r3 strict-k [inference] jitnn bert_b8_s512_fp16h           median   18.548 ms  p10   18.530  p90   18.572       431.3 samples/s  (first call 1149 ms)
+[mem] r3-jitnn-strict-n-all 10597 148
+r3 strict-n [inference] jitnn resnet50_b1_fp32             median    2.772 ms  p10    2.571  p90    3.346       360.7 samples/s  (first call 4413 ms)
+r3 strict-n [inference] jitnn resnet50_b32_fp32            median   24.634 ms  p10   24.433  p90   24.979      1299.0 samples/s  (first call 1711 ms)
+r3 strict-n [inference] jitnn resnet50_b128_fp32           median   84.236 ms  p10   84.028  p90   84.552      1519.5 samples/s  (first call 1980 ms)
+r3 strict-n [inference] jitnn resnet50_b1_fp16h            median    1.326 ms  p10    1.231  p90    1.456       754.1 samples/s  (first call 916 ms)
+r3 strict-n [inference] jitnn resnet50_b32_fp16h           median    6.081 ms  p10    5.978  p90    6.284      5262.4 samples/s  (first call 221 ms)
+r3 strict-n [inference] jitnn resnet50_b128_fp16h          median   17.436 ms  p10   17.282  p90   17.712      7341.2 samples/s  (first call 282 ms)
+r3 strict-n [inference] jitnn bert_b1_s128_fp32            median    3.606 ms  p10    3.497  p90    3.786       277.4 samples/s  (first call 269 ms)
+r3 strict-n [inference] jitnn bert_b32_s128_fp32           median   49.371 ms  p10   49.174  p90   49.528       648.2 samples/s  (first call 201 ms)
+r3 strict-n [inference] jitnn bert_b8_s512_fp32            median   55.720 ms  p10   55.405  p90   55.956       143.6 samples/s  (first call 276 ms)
+r3 strict-n [inference] jitnn bert_b1_s128_fp16            median    1.977 ms  p10    1.970  p90    2.013       505.7 samples/s  (first call 270 ms)
+r3 strict-n [inference] jitnn bert_b32_s128_fp16           median   12.464 ms  p10   12.391  p90   12.552      2567.5 samples/s  (first call 249 ms)
+r3 strict-n [inference] jitnn bert_b8_s512_fp16            median   18.654 ms  p10   18.502  p90   18.749       428.9 samples/s  (first call 249 ms)
+r3 strict-n [inference] jitnn bert_b1_s128_fp16h           median    1.150 ms  p10    1.114  p90    1.202       869.9 samples/s  (first call 251 ms)
+r3 strict-n [inference] jitnn bert_b32_s128_fp16h          median    5.832 ms  p10    5.621  p90    5.899      5486.6 samples/s  (first call 601 ms)
+r3 strict-n [inference] jitnn bert_b8_s512_fp16h           median    6.236 ms  p10    6.214  p90    6.257      1282.9 samples/s  (first call 138 ms)
+[mem] r3-jitnn-tf32-all 8717 148
+r3 tf32 [inference] jitnn resnet50_b1_fp32             median    2.214 ms  p10    1.968  p90    2.540       451.7 samples/s  (first call 2168 ms)
+r3 tf32 [inference] jitnn resnet50_b32_fp32            median   10.886 ms  p10   10.605  p90   11.343      2939.4 samples/s  (first call 224 ms)
+r3 tf32 [inference] jitnn resnet50_b128_fp32           median   31.926 ms  p10   31.461  p90   32.315      4009.3 samples/s  (first call 287 ms)
+r3 tf32 [inference] jitnn resnet50_b1_fp16h            median    1.197 ms  p10    1.133  p90    1.279       835.1 samples/s  (first call 852 ms)
+r3 tf32 [inference] jitnn resnet50_b32_fp16h           median    6.103 ms  p10    6.041  p90    6.211      5242.9 samples/s  (first call 227 ms)
+r3 tf32 [inference] jitnn resnet50_b128_fp16h          median   17.456 ms  p10   17.272  p90   17.718      7332.6 samples/s  (first call 284 ms)
+r3 tf32 [inference] jitnn bert_b1_s128_fp32            median    2.185 ms  p10    2.128  p90    2.284       457.6 samples/s  (first call 332 ms)
+r3 tf32 [inference] jitnn bert_b32_s128_fp32           median   14.414 ms  p10   14.316  p90   14.561      2220.0 samples/s  (first call 180 ms)
+r3 tf32 [inference] jitnn bert_b8_s512_fp32            median   20.556 ms  p10   20.434  p90   20.866       389.2 samples/s  (first call 261 ms)
+r3 tf32 [inference] jitnn bert_b1_s128_fp16            median    1.956 ms  p10    1.947  p90    1.990       511.2 samples/s  (first call 266 ms)
+r3 tf32 [inference] jitnn bert_b32_s128_fp16           median   12.556 ms  p10   12.449  p90   12.794      2548.6 samples/s  (first call 255 ms)
+r3 tf32 [inference] jitnn bert_b8_s512_fp16            median   18.749 ms  p10   18.608  p90   18.954       426.7 samples/s  (first call 256 ms)
+r3 tf32 [inference] jitnn bert_b1_s128_fp16h           median    1.157 ms  p10    1.117  p90    1.245       864.0 samples/s  (first call 262 ms)
+r3 tf32 [inference] jitnn bert_b32_s128_fp16h          median    5.828 ms  p10    5.621  p90    5.875      5491.1 samples/s  (first call 611 ms)
+r3 tf32 [inference] jitnn bert_b8_s512_fp16h           median    6.267 ms  p10    6.256  p90    6.313      1276.5 samples/s  (first call 141 ms)
+[mem] r3-pytorch-compile-ro-resnet50-1-0-fp32 10009 148
+r3 [gsweep] pytorch compile-ro     resnet50_b1      fp32 host     4.384 ms (p10    4.372 p90    4.406)  dev     4.265 ms  err 2.1e-07  setup    4.9 s
+[mem] r3-ort-exh-graph-resnet50-1-0-fp32 965 148
+r3 [gsweep] ort     exh-graph      resnet50_b1      fp32 host     3.339 ms (p10    3.328 p90    3.348)  dev     3.240 ms  err 3.7e-07  setup    0.4 s
+[mem] r3-pytorch-compile-ro-resnet50-1-0-tf32 10009 148
+r3 [gsweep] pytorch compile-ro     resnet50_b1      tf32 host     1.716 ms (p10    1.706 p90    1.728)  dev     1.546 ms  err 2.1e-04  setup    5.7 s
+[mem] r3-ort-exh-graph-resnet50-1-0-tf32 835 148
+r3 [gsweep] ort     exh-graph      resnet50_b1      tf32 host     1.190 ms (p10    1.181 p90    1.199)  dev     1.091 ms  err 1.2e-04  setup    0.4 s
+[mem] r3-pytorch-compile-ro-resnet50-1-0-fp16 885 148
+r3 [gsweep] pytorch compile-ro     resnet50_b1      fp16 host     1.230 ms (p10    1.224 p90    1.243)  dev     1.125 ms  err 7.7e-04  setup    5.6 s
+[mem] r3-ort-exh-graph-resnet50-1-0-fp16 1013 148
+r3 [gsweep] ort     exh-graph      resnet50_b1      fp16 host     0.935 ms (p10    0.931 p90    0.944)  dev     0.876 ms  err 5.3e-04  setup    0.6 s
+[mem] r3-pytorch-compile-resnet50-32-0-fp32 3291 148
+r3 [gsweep] pytorch compile        resnet50_b32     fp32 host    20.567 ms (p10   20.421 p90   20.775)  dev    18.820 ms  err 2.1e-07  setup    6.1 s
+[mem] r3-ort-exh-graph-resnet50-32-0-fp32 1815 148
+r3 [gsweep] ort     exh-graph      resnet50_b32     fp32 host    20.210 ms (p10   20.063 p90   20.523)  dev    18.833 ms  err 4.2e-07  setup    0.5 s
+[mem] r3-pytorch-compile-ro-resnet50-32-0-tf32 9297 148
+r3 [gsweep] pytorch compile-ro     resnet50_b32     tf32 host     8.341 ms (p10    8.300 p90    8.434)  dev     6.881 ms  err 3.3e-04  setup    5.6 s
+[mem] r3-ort-exh-graph-resnet50-32-0-tf32 1811 148
+r3 [gsweep] ort     exh-graph      resnet50_b32     tf32 host     9.724 ms (p10    9.647 p90    9.734)  dev     8.426 ms  err 3.5e-04  setup    0.5 s
+[mem] r3-pytorch-compile-resnet50-32-0-fp16 1063 148
+r3 [gsweep] pytorch compile        resnet50_b32     fp16 host     4.414 ms (p10    4.393 p90    4.439)  dev     3.705 ms  err 7.6e-04  setup    4.7 s
+[mem] r3-ort-exh-graph-resnet50-32-0-fp16 1447 148
+r3 [gsweep] ort     exh-graph      resnet50_b32     fp16 host     5.603 ms (p10    5.566 p90    5.614)  dev     4.855 ms  err 7.1e-04  setup    0.6 s
+[mem] r3-pytorch-compile-resnet50-128-0-fp32 5337 148
+r3 [gsweep] pytorch compile        resnet50_b128    fp32 host    72.236 ms (p10   71.958 p90   72.539)  dev    66.731 ms  err 2.6e-07  setup    9.3 s
+[mem] r3-ort-exh-graph-resnet50-128-0-fp32 7211 148
+r3 [gsweep] ort     exh-graph      resnet50_b128    fp32 host    79.355 ms (p10   78.949 p90   79.708)  dev    74.704 ms  err 7.1e-07  setup    0.7 s
+[mem] r3-pytorch-compile-ro-resnet50-128-0-tf32 11841 148
+r3 [gsweep] pytorch compile-ro     resnet50_b128    tf32 host    30.716 ms (p10   30.306 p90   31.289)  dev    24.973 ms  err 3.5e-04  setup    5.8 s
+[mem] r3-ort-exh-graph-resnet50-128-0-tf32 5165 148
+r3 [gsweep] ort     exh-graph      resnet50_b128    tf32 host    35.989 ms (p10   35.740 p90   36.310)  dev    30.534 ms  err 3.6e-04  setup    0.5 s
+[mem] r3-pytorch-compile-resnet50-128-0-fp16 2059 148
+r3 [gsweep] pytorch compile        resnet50_b128    fp16 host    14.480 ms (p10   14.298 p90   14.657)  dev    11.716 ms  err 8.4e-04  setup    5.7 s
+[mem] r3-ort-exh-graph-resnet50-128-0-fp16 3099 148
+r3 [gsweep] ort     exh-graph      resnet50_b128    fp16 host    20.616 ms (p10   20.316 p90   21.056)  dev    18.160 ms  err 8.5e-04  setup    0.7 s
+[mem] r3-pytorch-compile-ro-bert-1-128-fp32 1175 148
+r3 [gsweep] pytorch compile-ro     bert_b1_s128     fp32 host     2.924 ms (p10    2.917 p90    2.935)  dev     2.803 ms  err 6.3e-07  setup    3.7 s
+[mem] r3-ort-opt-exh-bert-1-128-fp32 1581 148
+r3 [gsweep] ort     opt-exh        bert_b1_s128     fp32 host     3.408 ms (p10    3.402 p90    3.417)  dev     3.303 ms  err 5.7e-07  setup    0.7 s
+[mem] r3-pytorch-compile-ro-bert-1-128-tf32 1175 148
+r3 [gsweep] pytorch compile-ro     bert_b1_s128     tf32 host     1.464 ms (p10    1.458 p90    1.470)  dev     1.348 ms  err 3.3e-04  setup    3.6 s
+[mem] r3-ort-opt-exh-bert-1-128-tf32 1583 148
+r3 [gsweep] ort     opt-exh        bert_b1_s128     tf32 host     2.374 ms (p10    2.343 p90    2.396)  dev     2.266 ms  err 3.3e-04  setup    0.6 s
+[mem] r3-pytorch-compile-bert-1-128-fp16 1617 148
+r3 [gsweep] pytorch compile        bert_b1_s128     fp16 host     1.167 ms (p10    1.163 p90    1.174)  dev     1.062 ms  err 2.3e-03  setup    3.8 s
+[mem] r3-ort-opt-exh-bert-1-128-fp16 1901 148
+r3 [gsweep] ort     opt-exh        bert_b1_s128     fp16 host     2.188 ms (p10    2.155 p90    2.233)  dev     2.097 ms  err 2.6e-03  setup    0.7 s
+[mem] r3-pytorch-compile-ro-bert-32-128-fp32 1281 148
+r3 [gsweep] pytorch compile-ro     bert_b32_s128    fp32 host    46.276 ms (p10   45.906 p90   46.656)  dev    45.036 ms  err 1.1e-06  setup    3.6 s
+[mem] r3-ort-opt-exh-bert-32-128-fp32 2107 148
+r3 [gsweep] ort     opt-exh        bert_b32_s128    fp32 host    50.382 ms (p10   50.013 p90   50.600)  dev    49.387 ms  err 1.2e-06  setup    0.7 s
+[mem] r3-pytorch-compile-bert-32-128-tf32 1281 148
+r3 [gsweep] pytorch compile        bert_b32_s128    tf32 host    11.166 ms (p10   10.997 p90   11.742)  dev    10.091 ms  err 9.0e-04  setup    3.7 s
+[mem] r3-ort-opt-exh-bert-32-128-tf32 2093 148
+r3 [gsweep] ort     opt-exh        bert_b32_s128    tf32 host    14.269 ms (p10   14.189 p90   14.382)  dev    13.466 ms  err 3.7e-04  setup    0.7 s
+[mem] r3-pytorch-compile-bert-32-128-fp16 1617 148
+r3 [gsweep] pytorch compile        bert_b32_s128    fp16 host     5.840 ms (p10    5.808 p90    5.988)  dev     5.368 ms  err 2.3e-03  setup    3.6 s
+[mem] r3-ort-opt-exh-bert-32-128-fp16 2157 148
+r3 [gsweep] ort     opt-exh        bert_b32_s128    fp16 host     8.626 ms (p10    8.604 p90    8.713)  dev     8.157 ms  err 3.2e-03  setup    0.7 s
+[mem] r3-pytorch-compile-ro-bert-8-512-fp32 1281 148
+r3 [gsweep] pytorch compile-ro     bert_b8_s512     fp32 host    49.431 ms (p10   49.046 p90   49.921)  dev    48.061 ms  err 1.1e-06  setup    3.8 s
+[mem] r3-ort-opt-exh-bert-8-512-fp32 2093 148
+r3 [gsweep] ort     opt-exh        bert_b8_s512     fp32 host    56.515 ms (p10   56.299 p90   56.529)  dev    55.763 ms  err 1.2e-06  setup    0.7 s
+[mem] r3-pytorch-compile-ro-bert-8-512-tf32 1281 148
+r3 [gsweep] pytorch compile-ro     bert_b8_s512     tf32 host    14.793 ms (p10   14.509 p90   15.089)  dev    13.540 ms  err 3.6e-04  setup    3.6 s
+[mem] r3-ort-opt-exh-bert-8-512-tf32 2097 148
+r3 [gsweep] ort     opt-exh        bert_b8_s512     tf32 host    16.661 ms (p10   16.561 p90   16.837)  dev    15.897 ms  err 3.5e-04  setup    0.6 s
+[mem] r3-pytorch-compile-ro-bert-8-512-fp16 1617 148
+r3 [gsweep] pytorch compile-ro     bert_b8_s512     fp16 host     6.080 ms (p10    6.034 p90    6.262)  dev     5.625 ms  err 2.3e-03  setup    3.6 s
+[mem] r3-ort-opt-exh-bert-8-512-fp16 2161 148
+r3 [gsweep] ort     opt-exh        bert_b8_s512     fp16 host    10.155 ms (p10   10.149 p90   10.163)  dev     9.768 ms  err 3.6e-03  setup    0.7 s
+[mem] r3-jtrain-strict-k 5317 148
+r3 strict-k [model] resnet50_cifar_train_b32     median    31.645 ms/step  p10    30.930  p90    33.065
+r3 strict-k [model] gpt2_train_b8_s256           median   140.576 ms/step  p10   140.151  p90   141.053
+r3 strict-k [model] bert_train_b8_s128           median    55.795 ms/step  p10    55.660  p90    55.989
+[mem] r3-jtrain-strict-n 5359 148
+r3 strict-n [model] resnet50_cifar_train_b32     median    31.942 ms/step  p10    31.120  p90    33.812
+r3 strict-n [model] gpt2_train_b8_s256           median   107.201 ms/step  p10   106.689  p90   107.657
+r3 strict-n [model] bert_train_b8_s128           median    41.707 ms/step  p10    41.565  p90    41.957
+[mem] r3-jtrain-tf32 5361 148
+r3 tf32 [model] resnet50_cifar_train_b32     median    17.465 ms/step  p10    16.057  p90    18.384
+r3 tf32 [model] gpt2_train_b8_s256           median    36.914 ms/step  p10    36.610  p90    37.946
+r3 tf32 [model] bert_train_b8_s128           median    15.868 ms/step  p10    15.846  p90    15.997
+[mem] r3-ptrain-eager-resnet50_cifar_train_b32-fp32 2795 148
+r3 [gtrain] pytorch eager      resnet50_cifar_train_b32   fp32     31.18 ms/step (p10    31.01 p90    31.23)  loss0 2.4637  setup    1.7 s
+[mem] r3-ptrain-compile-ro-resnet50_cifar_train_b32-tf32 8521 148
+r3 [gtrain] pytorch compile-ro resnet50_cifar_train_b32   tf32     11.28 ms/step (p10    11.06 p90    11.32)  loss0 2.4647  setup    4.3 s
+[mem] r3-ptrain-compile-ma-bert_train_b8_s128-fp32 2789 148
+r3 [gtrain] pytorch compile-ma bert_train_b8_s128         fp32     38.27 ms/step (p10    38.07 p90    38.59)  loss0 1.0000  setup    2.0 s
+[mem] r3-ptrain-compile-ro-bert_train_b8_s128-tf32 2913 148
+r3 [gtrain] pytorch compile-ro bert_train_b8_s128         tf32     12.07 ms/step (p10    11.98 p90    12.29)  loss0 1.0000  setup    1.8 s
+[mem] r3-ptrain-compile-ma-gpt2_train_b8_s256-fp32 4203 148
+r3 [gtrain] pytorch compile-ma gpt2_train_b8_s256         fp32     99.45 ms/step (p10    99.11 p90    99.80)  loss0 10.9700  setup    2.2 s
+[mem] r3-ptrain-compile-ma-gpt2_train_b8_s256-tf32 4201 148
+r3 [gtrain] pytorch compile-ma gpt2_train_b8_s256         tf32     26.98 ms/step (p10    26.87 p90    27.18)  loss0 10.9698  setup    2.1 s

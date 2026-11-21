@@ -18,6 +18,59 @@ Columns: jitNN's own kernels, jitNN with run-time autotuning (`-Djitnn.autotune`
 libraries (`-Djitnn.native=auto`, see [NATIVE.md](https://github.com/beestream-ai/jitNN/blob/main/docs/NATIVE.md)), PyTorch 2.14, ONNX Runtime (CUDA
 provider). Fusion is on. Fastest in bold.
 
+### NVIDIA A100 80GB PCIe, 2026-11-19
+
+The latest run, and a stricter one than the tables below: every framework in its fastest variant,
+three precisions kept apart, three interleaved rounds with the framework order rotated, median of
+the round medians (`scripts/gpu_final.sh` with `FRAMEWORKS="pt ort"`, summarised by
+`scripts/gpu_summary.py`; raw data in [results/a100/cuda-2026-11-19](results/a100/cuda-2026-11-19)).
+jitNN is `main` of that day, the library code of release 0.1.0-alpha, on TornadoVM 8.1.0; PyTorch
+2.14.1 with `torch.compile`; ONNX Runtime 1.30.0 (CUDA provider, built for the AArch64 host). FP32 is
+strict (TF32 off everywhere); jitNN's FP32 rows are the faster of its own kernels and
+`-Djitnn.native=auto`, its TF32 rows add `-Djitnn.native.tf32=true`, and its FP16 rows run the whole
+model in half precision. TensorRT was not run on this host, and this ONNX Runtime build fails with
+CUDA graphs on BERT, so its BERT rows run without them.
+
+Milliseconds host to host; in brackets the first call (seconds) and the peak GPU memory (MB);
+fastest in bold.
+
+| Workload | Precision | jitNN | PyTorch | ONNX Runtime | jitNN vs best |
+|---|---|---|---|---|---|
+| ResNet-50 b1 | FP32 | **2.75** [9.1] {1243} | 4.42 [12.1] {9901} | 3.34 [6.1] {815} | 0.82x |
+| ResNet-50 b32 | FP32 | 24.34 [10.0] {3393} | 20.32 [1069.5] {6521} | **20.18** [6.1] {1663} | 1.21x |
+| ResNet-50 b128 | FP32 | 84.17 [9.6] {10017} | **72.24** [1019.2] {8019} | 78.89 [6.3] {7063} | 1.17x |
+| ResNet-50 b1 | TF32 | 2.17 [2.8] {1373} | 1.72 [14.3] {9861} | **1.19** [0.4] {687} | 1.83x |
+| ResNet-50 b32 | TF32 | 10.89 [1.9] {3171} | **8.34** [14.0] {9247} | 9.72 [0.4] {1667} | 1.31x |
+| ResNet-50 b128 | TF32 | 31.94 [2.5] {8709} | **30.41** [13.8] {11693} | 35.77 [0.5] {5015} | 1.05x |
+| ResNet-50 b1 | FP16 | 1.20 [4.2] {1315} | 1.23 [14.5] {777} | **0.94** [6.4] {801} | 1.27x |
+| ResNet-50 b32 | FP16 | 6.03 [4.1] {4167} | **4.41** [75.9] {3909} | 5.53 [6.4] {1295} | 1.37x |
+| ResNet-50 b128 | FP16 | 17.44 [4.5] {12433} | **14.48** [83.7] {4725} | 20.62 [6.5] {2949} | 1.20x |
+| BERT-base b1 x 128 | FP32 | 3.61 [1.8] {949} | **2.92** [8.8] {1067} | 3.41 [11.1] {1435} | 1.23x |
+| BERT-base b32 x 128 | FP32 | 49.32 [1.9] {1077} | **46.28** [9.3] {1241} | 50.22 [11.3] {1949} | 1.07x |
+| BERT-base b8 x 512 | FP32 | 55.72 [1.8] {1079} | **49.43** [9.2] {1151} | 56.41 [11.1] {1947} | 1.13x |
+| BERT-base b1 x 128 | TF32 | 2.19 [1.5] {949} | **1.46** [8.9] {1027} | 2.45 [0.6] {1459} | 1.50x |
+| BERT-base b32 x 128 | TF32 | 14.40 [1.5] {1045} | **11.01** [40.4] {1247} | 14.24 [0.6] {1951} | 1.31x |
+| BERT-base b8 x 512 | TF32 | 20.60 [1.5] {1047} | **14.79** [9.7] {1133} | 16.66 [0.6] {1945} | 1.39x |
+| BERT-base b1 x 128 | FP16 | **1.15** [2.7] {1507} | 1.17 [22.5] {1489} | 2.31 [9.8] {1787} | 0.98x |
+| BERT-base b32 x 128 | FP16 | **5.82** [2.6] {1699} | 5.84 [30.1] {1511} | 8.65 [10.0] {2009} | 1.00x |
+| BERT-base b8 x 512 | FP16 | 6.24 [2.7] {1703} | **6.12** [9.4] {1469} | 10.15 [9.9] {2011} | 1.02x |
+
+The first-call column shows `torch.compile`'s cost (9 s to 18 minutes per row) against jitNN's
+1.5-10 s. jitNN holds more device memory on ResNet-50 at large batches (12.4 GB at b128 FP16 against
+4.7 and 2.9 GB).
+
+Training, milliseconds per step (forward, backward, optimiser step), against PyTorch
+(`ModelProfileAccelTest` and `scripts/gtrain.py`, same models and seeds):
+
+| Workload | Precision | jitNN | PyTorch | jitNN vs PyTorch |
+|---|---|---|---|---|
+| ResNet-50, CIFAR-10, batch 32, SGD | FP32 | 31.69 | **31.20** (eager) | 1.02x |
+| ResNet-50, CIFAR-10, batch 32, SGD | TF32 | 17.36 | **11.28** (compiled) | 1.54x |
+| BERT-base, batch 8 x 128, Adam | FP32 | 41.64 | **38.27** (compiled) | 1.09x |
+| BERT-base, batch 8 x 128, Adam | TF32 | 15.87 | **12.07** (compiled) | 1.31x |
+| GPT-2 (124M), batch 8 x 256, Adam | FP32 | 107.07 | **99.45** (compiled) | 1.08x |
+| GPT-2 (124M), batch 8 x 256, Adam | TF32 | 36.91 | **26.99** (compiled) | 1.37x |
+
 ### NVIDIA A100 80GB PCIe (CUDA 13.4, 2026-10-23)
 
 | Workload | jitNN kernels | autotuned | vendor libraries | PyTorch | ONNX Runtime 1.30 |

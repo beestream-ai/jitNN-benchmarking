@@ -1,0 +1,2 @@
+name, driver_version, clocks.max.sm [MHz], temperature.gpu
+NVIDIA A100 80GB PCIe, 610.57.04, 1410 MHz, 40

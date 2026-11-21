@@ -4,6 +4,54 @@ Benchmarks of [jitNN](https://github.com/beestream-ai/jitNN) against PyTorch, ON
 TensorRT and DJL, the tools that run them, and their results. The numbers and how they were taken
 are in [PERFORMANCE.md](PERFORMANCE.md).
 
+## Latest results
+
+NVIDIA A100 80GB PCIe, 2026-11-19: jitNN (`main`, the library code of release 0.1.0-alpha) against
+PyTorch 2.14 (`torch.compile`) and ONNX Runtime 1.30 (CUDA provider). Milliseconds from host input
+to host output, median of three interleaved rounds; lower is better, fastest in bold. The last
+column is jitNN's time over the faster of the other two: below 1 means jitNN is faster.
+
+**Inference**
+
+| Model | Batch | Precision | jitNN | PyTorch | ONNX Runtime | jitNN vs best |
+|---|---|---|---|---|---|---|
+| ResNet-50 | 1 | FP32 | **2.75** | 4.42 | 3.34 | 0.82x |
+| ResNet-50 | 32 | FP32 | 24.34 | 20.32 | **20.18** | 1.21x |
+| ResNet-50 | 128 | FP32 | 84.17 | **72.24** | 78.89 | 1.17x |
+| ResNet-50 | 1 | TF32 | 2.17 | 1.72 | **1.19** | 1.83x |
+| ResNet-50 | 32 | TF32 | 10.89 | **8.34** | 9.72 | 1.31x |
+| ResNet-50 | 128 | TF32 | 31.94 | **30.41** | 35.77 | 1.05x |
+| ResNet-50 | 1 | FP16 | 1.20 | 1.23 | **0.94** | 1.27x |
+| ResNet-50 | 32 | FP16 | 6.03 | **4.41** | 5.53 | 1.37x |
+| ResNet-50 | 128 | FP16 | 17.44 | **14.48** | 20.62 | 1.20x |
+| BERT-base | 1 x 128 | FP32 | 3.61 | **2.92** | 3.41 | 1.23x |
+| BERT-base | 32 x 128 | FP32 | 49.32 | **46.28** | 50.22 | 1.07x |
+| BERT-base | 8 x 512 | FP32 | 55.72 | **49.43** | 56.41 | 1.13x |
+| BERT-base | 1 x 128 | TF32 | 2.19 | **1.46** | 2.45 | 1.50x |
+| BERT-base | 32 x 128 | TF32 | 14.40 | **11.01** | 14.24 | 1.31x |
+| BERT-base | 8 x 512 | TF32 | 20.60 | **14.79** | 16.66 | 1.39x |
+| BERT-base | 1 x 128 | FP16 | **1.15** | 1.17 | 2.31 | 0.98x |
+| BERT-base | 32 x 128 | FP16 | **5.82** | 5.84 | 8.65 | 1.00x |
+| BERT-base | 8 x 512 | FP16 | 6.24 | **6.12** | 10.15 | 1.02x |
+
+**Training**, milliseconds per step (forward, backward, optimiser), against PyTorch
+
+| Workload | Precision | jitNN | PyTorch | jitNN vs PyTorch |
+|---|---|---|---|---|
+| ResNet-50, CIFAR-10, batch 32, SGD | FP32 | 31.69 | **31.20** | 1.02x |
+| ResNet-50, CIFAR-10, batch 32, SGD | TF32 | 17.36 | **11.28** | 1.54x |
+| BERT-base, batch 8 x 128, Adam | FP32 | 41.64 | **38.27** | 1.09x |
+| BERT-base, batch 8 x 128, Adam | TF32 | 15.87 | **12.07** | 1.31x |
+| GPT-2 (124M), batch 8 x 256, Adam | FP32 | 107.07 | **99.45** | 1.08x |
+| GPT-2 (124M), batch 8 x 256, Adam | TF32 | 36.91 | **26.99** | 1.37x |
+
+FP32 is strict (TF32 off everywhere); jitNN's FP32 rows are its faster of own kernels and
+`-Djitnn.native=auto`, TF32 rows add `-Djitnn.native.tf32=true`, FP16 rows run the whole model in
+half precision. ONNX Runtime runs BERT without CUDA graphs on this host (its build fails with them).
+Setup, first-call times, peak memory and the raw data:
+[PERFORMANCE.md](PERFORMANCE.md#nvidia-a100-80gb-pcie-2026-11-19) and
+[results/a100/cuda-2026-11-19](results/a100/cuda-2026-11-19).
+
 ## Layout
 
 | Path | Content |
