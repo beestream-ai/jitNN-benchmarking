@@ -1,38 +1,75 @@
 # Performance
 
-[Inference against PyTorch and ONNX Runtime](#inference-against-pytorch-and-onnx-runtime) comes
-first; the sections after it cover jitNN's own kernels, training, fusion, autotuning, several GPUs
-and compile time.
+The [headline comparison](#against-pytorch-and-onnx-runtime) comes first: jitNN against PyTorch with
+`torch.compile` and ONNX Runtime, on an A100, inference and training. [Earlier inference
+runs](#earlier-inference-runs) follow, kept for reference and not comparable with it. The sections
+after them track jitNN's own kernels, training steps, fusion, autotuning, several GPUs and compile
+time; [Known gaps](#known-gaps) closes.
 
-## Inference against PyTorch and ONNX Runtime
+## Summary
 
-ResNet-50 and BERT-base (the encoder, 12 layers of 768), built by jitNN from the same seeds as the
-Python side, so every framework runs the same weights on the same inputs (`InferenceBenchAccelTest`
-and `scripts/inference.py`). Each timed call is host input in, forward pass, host output out; 10
-warm-up calls, then the median of 50. FP32 runs have TF32 off in every framework. FP16 rows run the
-whole model in half precision in every framework (`Autocast.enableHalf` in jitNN). jitNN's FP32
-outputs match PyTorch's to 3e-7 to 1e-6, its FP16 outputs to about 4e-4. Every run waited for an
-idle GPU below 45 C, with clocks and throttle reasons sampled: no thermal throttling.
+From the A100 run of 2026-11-19, every framework in its fastest variant:
 
-Columns: jitNN's own kernels, jitNN with run-time autotuning (`-Djitnn.autotune`), jitNN with vendor
-libraries (`-Djitnn.native=auto`, see [NATIVE.md](https://github.com/beestream-ai/jitNN/blob/main/docs/NATIVE.md)), PyTorch 2.14, ONNX Runtime (CUDA
-provider). Fusion is on. Fastest in bold.
+- **Inference.** jitNN is the fastest on ResNet-50 b1 FP32 (0.82x the best) and level on BERT-base
+  FP16 (0.98-1.02x). On the other 14 rows it is 1.05-1.83x behind the faster of PyTorch and
+  ONNX Runtime: 1.05-1.50x on all but ResNet-50 b1 under TF32 (1.83x).
+- **Training.** In FP32 a step is 1.02-1.09x PyTorch's; under TF32, 1.31-1.54x.
+- **First call.** From a cold start jitNN's first result takes 1.5-10 s. `torch.compile` takes
+  8.8-14.5 s in `reduce-overhead` mode and 22-1,070 s in `max-autotune` (the 1,070 s rows are
+  ResNet-50 FP32 at batch 32 and 128). In later runs, once their caches are filled, PyTorch takes
+  3.5-10 s and jitNN 0.1-6.1 s. ONNX Runtime takes 0.4-11 s.
+- **Memory.** At batch 1 the three frameworks hold 0.7-1.8 GB, except PyTorch on ResNet-50 in
+  FP32 and TF32, which holds 9.9 GB against jitNN's 1.2-1.4 GB. At batch 128 on ResNet-50 in FP32
+  and FP16, jitNN holds the most: 10.0 and 12.4 GB, against 8.0 and 4.7 GB for PyTorch and 7.1
+  and 2.9 GB for ONNX Runtime.
+
+TF32 is the widest gap, and it matters most: TF32 is PyTorch's default for convolutions.
+
+## Against PyTorch and ONNX Runtime
+
+### Method
+
+- **Models.** ResNet-50 and BERT-base (the encoder, 12 layers of 768), built by jitNN from the same
+  seeds as the Python side, so every framework runs the same weights on the same inputs
+  (`InferenceBenchAccelTest` and `scripts/inference.py`).
+- **Timing.** Each timed call is host input in, forward pass, host output out: 10 warm-up calls,
+  then the median of 50. Three rounds, interleaved, with the framework order rotated in each
+  round; each table cell is the median of the three round medians (`scripts/gpu_final.sh` with
+  `FRAMEWORKS="pt ort" ROUNDS=3`, summarised by `scripts/gpu_summary.py`).
+- **Precision.** Three precisions, kept apart. FP32 is strict: TF32 off in every framework,
+  cuDNN included. TF32 lets every framework use TF32 tensor cores for FP32 products and
+  convolutions. FP16 runs the whole model in half precision (`Autocast.enableHalf` in jitNN).
+  jitNN's FP32 outputs match PyTorch's to 3e-7 to 1e-6, its FP16 outputs to about 4e-4.
+- **Variants.** Every framework runs in its fastest variant per row:
+  - jitNN: the faster of its own kernels and `-Djitnn.native=auto` (FP32), with
+    `-Djitnn.native.tf32=true` (TF32).
+  - PyTorch: `torch.compile` with `reduce-overhead` or `max-autotune`, whichever was faster in a
+    sweep on an A10.
+  - ONNX Runtime: the CUDA provider, `exh-graph` on ResNet-50 (with CUDA graphs) and `opt-exh`
+    on BERT. This build fails with CUDA error 700 in CUDA-graph replay on every BERT row, so BERT
+    runs without CUDA graphs.
+  - TensorRT was not run: there is no build for this host.
+- **First call** is the time from loading the model to its first result in round 1, with every
+  cache empty. Later rounds are quoted in the text.
+- **Peak memory** is the device memory in use as `nvidia-smi` reports it, sampled every 100 ms, so
+  it includes each framework's CUDA context and allocator cache.
 
 ### NVIDIA A100 80GB PCIe, 2026-11-19
 
-The latest run, and a stricter one than the tables below: every framework in its fastest variant,
-three precisions kept apart, three interleaved rounds with the framework order rotated, median of
-the round medians (`scripts/gpu_final.sh` with `FRAMEWORKS="pt ort"`, summarised by
-`scripts/gpu_summary.py`; raw data in [results/a100/cuda-2026-11-19](results/a100/cuda-2026-11-19)).
-jitNN is `main` of that day, the library code of release 0.1.0-alpha, on TornadoVM 8.1.0; PyTorch
-2.14.1 with `torch.compile`; ONNX Runtime 1.30.0 (CUDA provider, built for the AArch64 host). FP32 is
-strict (TF32 off everywhere); jitNN's FP32 rows are the faster of its own kernels and
-`-Djitnn.native=auto`, its TF32 rows add `-Djitnn.native.tf32=true`, and its FP16 rows run the whole
-model in half precision. TensorRT was not run on this host, and this ONNX Runtime build fails with
-CUDA graphs on BERT, so its BERT rows run without them.
+The setup:
 
-Milliseconds host to host; in brackets the first call (seconds) and the peak GPU memory (MB);
-fastest in bold.
+- **GPU:** driver 610.57, CUDA 13.4, max SM clock 1410 MHz.
+- **Host:** AArch64 (Arm Neoverse-N1), 128 cores.
+- **jitNN:** `main` of that day (`fadd058`, the library code of release 0.1.0-alpha) on
+  TornadoVM 8.1.0, JDK 25.0.2.
+- **PyTorch:** 2.14.1 (CUDA 13.0).
+- **ONNX Runtime:** 1.30.0, built from source for AArch64.
+
+The raw data is in [results/a100/cuda-2026-11-19](results/a100/cuda-2026-11-19).
+
+**Inference.** Milliseconds host to host; in brackets the first call (seconds), in braces the peak
+GPU memory (MB). Fastest in bold. The last column is jitNN's time over the faster of PyTorch and
+ONNX Runtime: below 1 means jitNN is faster.
 
 | Workload | Precision | jitNN | PyTorch | ONNX Runtime | jitNN vs best |
 |---|---|---|---|---|---|
@@ -55,12 +92,9 @@ fastest in bold.
 | BERT-base b32 x 128 | FP16 | **5.82** [2.6] {1699} | 5.84 [30.1] {1511} | 8.65 [10.0] {2009} | 1.00x |
 | BERT-base b8 x 512 | FP16 | 6.24 [2.7] {1703} | **6.12** [9.4] {1469} | 10.15 [9.9] {2011} | 1.02x |
 
-The first-call column shows `torch.compile`'s cost (9 s to 18 minutes per row) against jitNN's
-1.5-10 s. jitNN holds more device memory on ResNet-50 at large batches (12.4 GB at b128 FP16 against
-4.7 and 2.9 GB).
-
-Training, milliseconds per step (forward, backward, optimiser step), against PyTorch
-(`ModelProfileAccelTest` and `scripts/gtrain.py`, same models and seeds):
+**Training.** Milliseconds per step (forward, backward, optimiser step), against PyTorch eager or
+compiled as marked per row (`ModelProfileAccelTest` and `scripts/gtrain.py`, same models and
+seeds). ONNX Runtime does not train.
 
 | Workload | Precision | jitNN | PyTorch | jitNN vs PyTorch |
 |---|---|---|---|---|
@@ -71,9 +105,46 @@ Training, milliseconds per step (forward, backward, optimiser step), against PyT
 | GPT-2 (124M), batch 8 x 256, Adam | FP32 | 107.07 | **99.45** (compiled) | 1.08x |
 | GPT-2 (124M), batch 8 x 256, Adam | TF32 | 36.91 | **26.99** (compiled) | 1.37x |
 
-### NVIDIA A100 80GB PCIe (CUDA 13.4, 2026-10-23)
+### Reading
 
-| Workload | jitNN kernels | autotuned | vendor libraries | PyTorch | ONNX Runtime 1.30 |
+- **Strict FP32.** jitNN is closest here: 1.07-1.23x behind on inference and 1.02-1.09x on
+  training, and ahead on ResNet-50 at batch 1.
+- **FP16.** jitNN is level with PyTorch on BERT-base, and 1.2-1.4x behind on ResNet-50, where its
+  convolutions trail cuDNN's.
+- **TF32.** The gap is largest here, 1.05-1.83x on inference and 1.31-1.54x on training. It is
+  widest at batch 1 (1.83x on ResNet-50, 1.50x on BERT-base) and narrows to 1.05x on ResNet-50 at
+  batch 128.
+- **First call, cold.** jitNN compiles its plan in 1.5-10 s, the longest being ResNet-50 FP32
+  on its own kernels. `torch.compile` takes 8.8-14.5 s in `reduce-overhead` mode and 22-1,070 s
+  in `max-autotune` mode; ResNet-50 FP32 at batch 32 and 128 are the rows over 1,000 s.
+- **First call, later rounds.** Both frameworks are faster once their caches are filled:
+  PyTorch's from 3.5 to 10 s, jitNN's from 0.1 to 6.1 s. Which time applies to a deployment
+  depends on whether its compile caches survive a restart.
+- **Memory.** jitNN holds 0.9-1.7 GB on BERT-base, against 1.0-1.5 GB for PyTorch and 1.4-2.0 GB
+  for ONNX Runtime. On ResNet-50 at large batch it holds the most: its compiled plan keeps every
+  intermediate the plan needs on the device, even with buffer reuse.
+
+## Earlier inference runs
+
+These runs predate the method above. They are kept for reference and should not be quoted against
+it, for three reasons:
+
+- PyTorch ran eagerly, without `torch.compile` or CUDA graphs.
+- Each was a single round, not interleaved.
+- On NVIDIA GPUs, jitNN's vendor-library column sent FP32 convolutions to cuDNN, whose default math
+  is TF32 on Ampere and newer GPUs, while PyTorch and ONNX Runtime ran with TF32 off. The
+  ResNet-50 FP32 rows of that column are therefore TF32 against FP32, which is where its
+  1.3-2.6x leads came from. At batch 32, its 11.3 ms then is close to the 10.9 ms of the TF32 row
+  now, and its own-kernel 24.1 ms to the 24.3 ms of the strict FP32 row; under the strict method
+  it is 1.17-1.21x behind at batch 32 and 128. jitNN has since sent FP32 convolutions to cuDNN only with
+  `-Djitnn.native.tf32=true`.
+
+The Apple M4 Pro run has no TF32 question (Apple GPUs have no TF32), but it has the first two
+limits. None of the three has been re-run under the new method yet.
+
+### NVIDIA A100 80GB PCIe (CUDA 13.4, 2026-10-23; superseded by the run above)
+
+| Workload | jitNN kernels | autotuned | vendor libraries | PyTorch (eager) | ONNX Runtime 1.30 |
 |---|---|---|---|---|---|
 | ResNet-50 b1 FP32 | 3.46 | 3.56 | **3.40** | 8.12 | 4.05 |
 | ResNet-50 b32 FP32 | 24.1 | 23.8 | **11.3** | 31.7 | 29.3 |
@@ -88,9 +159,9 @@ Training, milliseconds per step (forward, backward, optimiser step), against PyT
 | BERT-base b32 x 128 FP16 | 20.1 | 18.8 | 7.27 | **6.24** | 10.4 |
 | BERT-base b8 x 512 FP16 | 26.0 | 24.2 | 8.19 | **6.70** | 12.0 |
 
-### NVIDIA RTX 5070 Ti (CUDA 13.0, 2026-10-23)
+### NVIDIA RTX 5070 Ti (CUDA 13.0, 2026-10-23; earlier method)
 
-| Workload | jitNN kernels | autotuned | vendor libraries | PyTorch | ONNX Runtime 1.31 |
+| Workload | jitNN kernels | autotuned | vendor libraries | PyTorch (eager) | ONNX Runtime 1.31 |
 |---|---|---|---|---|---|
 | ResNet-50 b1 FP32 | 1.99 | 1.99 | **1.98** | 3.91 | 3.18 |
 | ResNet-50 b32 FP32 | 24.2 | 24.2 | **14.8** | 22.3 | 18.7 |
@@ -109,7 +180,7 @@ On this GPU the vendor-library rows need a TornadoVM that loads the CUDA 13 libr
 ones (beehive-lab/TornadoVM#1280): cuBLAS 12.0 has no kernels for Blackwell GPUs and ran SGEMM at
 9.7 TFLOP/s against 33.6 for cuBLAS 13.1, which made BERT slower with vendor libraries than without.
 
-### Apple M4 Pro (Metal, 2026-10-18)
+### Apple M4 Pro (Metal, 2026-10-18; earlier method)
 
 PyTorch 2.14.1 on MPS; ONNX Runtime 1.31.0 with the CoreML provider on the CPU and GPU (not the
 Neural Engine); jitNN with MLX 0.32.3 (`scripts/run_mac.sh`).
@@ -131,29 +202,11 @@ Neural Engine); jitNN with MLX 0.32.3 (`scripts/run_mac.sh`).
 
 The BERT b8 x 512 FP16 row was timed on a busy machine (re-timings spread from 157 to 194 ms).
 
-### Reading
-
-- With vendor libraries jitNN is the fastest on 6 of 12 workloads on the A100 and 5 on the RTX
-  5070 Ti, ResNet-50 FP32 1.3-2.6x ahead at every batch. Elsewhere it is at most 1.28x behind the
-  faster of PyTorch and ONNX Runtime: FP16 BERT at large batch (attention) and ResNet-50 FP16 at
-  batch 128.
-- On the M4 Pro, MLX makes ResNet-50 1.2-1.3x faster than PyTorch MPS and BERT-base level with
-  it; ONNX Runtime with CoreML compiles the whole network with Apple's kernels and stays ahead.
-- On its own kernels jitNN is level with or ahead of PyTorch on ResNet-50 FP32 on NVIDIA GPUs and
-  1.3-3x behind on BERT and FP16. Autotuning closes a third of the BERT FP32 gap on the RTX 5070 Ti.
-
-To reproduce: `python scripts/inference.py <dir>` exports the models and times PyTorch and ONNX
-Runtime; `python <jitNN>/scripts/onnx/inference_onnx.py <dir>` writes ONNX Runtime's outputs and timings next to
-the models; `./mvnw test -Paccel-tests -pl jitnn-onnx -Dtest=OnnxInferenceAccelTest -Djitnn.onnx.inference=<dir>`
-runs the same files through `jitnn-onnx`.
-`python <jitNN>/scripts/onnx/int8_onnx.py <dir> <int8 dir>` quantises them with ONNX Runtime (BERT dynamic,
-ResNet-50 QDQ) and the same test with `-Djitnn.onnx.inference=<int8 dir> -Djitnn.onnx.inference.match=int8` runs
-the INT8 files (results in OPERATORS.md, "Quantised models").
-
-### DJL examples
+## DJL examples
 
 DJL's examples on an A10, run unchanged on the jitNN engine, with jitNN's kernels and with vendor
-libraries (`scripts/djl-examples`):
+libraries (`scripts/djl-examples`). These are jitNN's times only: the same examples on DJL's
+PyTorch and ONNX Runtime engines have not been timed yet.
 
 | Example | jitNN kernels | `--with-native` |
 |---|---|---|
@@ -164,6 +217,28 @@ libraries (`scripts/djl-examples`):
 DJL's inference examples give the same results on jitNN as on DJL's PyTorch and ONNX Runtime
 engines: `ImageClassification` returns identical probabilities, and `YoloDetection` finds the
 frisbee at 0.915 and the dog at 0.657 (ONNX Runtime: 0.917 and 0.661).
+
+## Reproducing
+
+- **The head-to-head.** `JITNN_HOME=<jitNN> scripts/gpu_final.sh <out dir>` runs every framework
+  and precision for the given number of rounds (`ROUNDS`, `FRAMEWORKS`). `scripts/gpu_summary.py
+  <out dir>/final.txt` then writes the tables above.
+- **Exporting and timing alone.** `python scripts/inference.py <dir>` exports the models and times
+  PyTorch and ONNX Runtime.
+- **The same files through jitNN's importer.** `python <jitNN>/scripts/onnx/inference_onnx.py
+  <dir>` writes ONNX Runtime's outputs and timings next to the models, and `./mvnw test
+  -Paccel-tests -pl jitnn-onnx -Dtest=OnnxInferenceAccelTest -Djitnn.onnx.inference=<dir>` (in
+  jitNN) runs them through `jitnn-onnx`.
+- **INT8.** `python <jitNN>/scripts/onnx/int8_onnx.py <dir> <int8 dir>` quantises the models with
+  ONNX Runtime (BERT dynamic, ResNet-50 QDQ). The same test with
+  `-Djitnn.onnx.inference=<int8 dir> -Djitnn.onnx.inference.match=int8` runs the INT8 files; the
+  results are in jitNN's OPERATORS.md, "Quantised models".
+
+## jitNN's own progress
+
+The sections from here to [Known gaps](#known-gaps) measure jitNN's kernels and training steps as
+they were improved, on earlier builds and several devices. Where they show PyTorch, it is PyTorch
+eager (on CUDA or MPS), so they show where jitNN stood, not the comparison above.
 
 ## Baseline kernels
 
@@ -394,27 +469,46 @@ against 12.5 s with the Graal-based compiler it replaced. beehive-lab/TornadoVM#
 
 ## Known gaps
 
+Against PyTorch and ONNX Runtime (the A100 run of 2026-11-19):
 
-- Convolutions run on the same register-blocked tiles as the GEMM and share its ceiling: about
-  30% of MPS on Metal.
-- A CNN step is dominated on Apple GPUs by TornadoVM's per-kernel dispatch cost.
-- Metal GEMM is about 42% of MPS. Every tile shape, and the simdgroup path, plateaus at 2.2-2.3
-  TFLOP/s; getting further needs vector loads, double buffering and larger SIMD-group tiles.
-- Metal transpose and strided reductions sit at 100-140 GB/s.
-- GRU steps are 4-5x slower than cuDNN (one kernel per timestep; see above). LSTM layers now run
-  fused, but have not been measured against cuDNN again.
-- On its own kernels, BERT and FP16 inference are 1.3-3x behind PyTorch (GEMM, convolution and
-  attention kernels slower than cuBLAS and cuDNN). With vendor libraries the largest gaps are FP16
-  BERT at large batch (1.2x behind PyTorch, attention) and ResNet-50 FP16 at batch 128 (1.28x
-  behind ONNX Runtime on the A100).
-- Cold start: the first call of a large model spends several seconds compiling kernels (about
-  9.6 s for YOLO11n through DJL). Later calls of the same shapes replay the compiled plan, and a
-  reloaded model reuses the plans of a closed one.
-- With MLX, the bias and activation after MLX's products and convolutions run as separate jitNN
-  kernels: TornadoVM's MLX binding has no epilogues.
-- cuDNN convolutions use TF32 on Ampere and newer GPUs, as PyTorch does by default; set
+- **TF32 is the widest gap.** Inference is 1.05-1.83x behind and training 1.31-1.54x, worst at
+  small batch (ResNet-50 b1 1.83x, BERT-base b1 1.50x). TF32 is PyTorch's default for
+  convolutions, so it is what a user comparing defaults sees first.
+- **ResNet-50 in FP16** is 1.2-1.4x behind: jitNN's convolutions trail cuDNN's.
+- **Strict FP32 inference** is 1.07-1.23x behind, except ResNet-50 at batch 1, where jitNN leads.
+- **Device memory on large CNN batches.** ResNet-50 at b128 holds 8.7-12.4 GB against 2.9-7.1 GB
+  for ONNX Runtime.
+- **Coverage of the comparison.**
+  - It was run only on an A100. The RTX 5070 Ti and M4 Pro tables use the earlier method, and no
+    inference GPU (L4, T4, A10) or H100 has been measured under the new one.
+  - TensorRT was not run.
+  - ONNX Runtime ran BERT without CUDA graphs, so its BERT rows understate it.
+  - The CPU backend has not been compared with PyTorch or ONNX Runtime on a CPU.
+  - DJL's examples have been timed only on the jitNN engine.
+
+jitNN's own kernels and runtime:
+
+- **Convolutions on Metal.** They run on the same register-blocked tiles as the GEMM and share
+  its ceiling: about 30% of MPS.
+- **Metal GEMM** is about 42% of MPS. Every tile shape, and the simdgroup path, plateaus at
+  2.2-2.3 TFLOP/s; getting further needs vector loads, double buffering and larger SIMD-group
+  tiles.
+- **Metal transposes and strided reductions** sit at 100-140 GB/s.
+- **Dispatch on Apple GPUs.** A CNN step there is dominated by TornadoVM's per-kernel dispatch
+  cost.
+- **GRU steps** are 4-5x slower than cuDNN (one kernel per timestep; see above). LSTM layers now
+  run fused, but have not been measured against cuDNN again.
+- **Cold start.** The first call of a large model compiles its kernels: 1.5-10 s for ResNet-50
+  and BERT-base above, about 9.6 s for YOLO11n through DJL. Later calls of the same shapes replay
+  the compiled plan, and a reloaded model reuses the plans of a closed one.
+- **MLX epilogues.** With MLX, the bias and activation after MLX's products and convolutions run
+  as separate jitNN kernels: TornadoVM's MLX binding has no epilogues.
+- **cuDNN math.** cuDNN convolutions use TF32 on Ampere and newer GPUs, as PyTorch's do by
+  default. Under `-Djitnn.native=auto` FP32 convolutions go to cuDNN only with
+  `-Djitnn.native.tf32=true`. Naming `cudnn` in `-Djitnn.native` sends them there regardless; set
   `NVIDIA_TF32_OVERRIDE=0` for FP32 arithmetic.
-- The gradient all-reduce of data-parallel training does not overlap the backward pass: a rank's
-  plan runs on one TornadoVM stream.
-- The Fourier transforms are direct O(n^2) DFTs, and the matrix decompositions use one
-  work-group per matrix: fine for the sizes inside models, slow for large inputs.
+- **Gradient all-reduce.** In data-parallel training it does not overlap the backward pass: a
+  rank's plan runs on one TornadoVM stream.
+- **FFTs and decompositions.** The Fourier transforms are direct O(n^2) DFTs, and the matrix
+  decompositions use one work-group per matrix: fine for the sizes inside models, slow for large
+  inputs.
