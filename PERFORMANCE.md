@@ -51,8 +51,9 @@ TF32 is the widest gap, and it matters most: TF32 is PyTorch's default for convo
   - TensorRT was not run: there is no build for this host.
 - **First call** is the time from loading the model to its first result in round 1, with every
   cache empty. Later rounds are quoted in the text.
-- **Peak memory** is the device memory in use as `nvidia-smi` reports it, sampled every 100 ms, so
-  it includes each framework's CUDA context and allocator cache.
+- **Peak memory** is taken in round 1: the most device memory in use during the run, as
+  `nvidia-smi` reports it every 100 ms, minus the memory in use before it. It includes each
+  framework's CUDA context and allocator cache.
 
 ### NVIDIA A100 80GB PCIe, 2026-11-19
 
