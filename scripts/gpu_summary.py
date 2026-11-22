@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Summarises gpu_final.sh: per row and precision, the median over rounds of each framework's host-to-host
-time, first-call time and peak GPU memory, and jitNN's ratio to the faster of PyTorch and ONNX Runtime
-and to the fastest of all. jitNN's time is its best configuration's median.
+time, its first-call time and peak GPU memory in round 1 (every cache empty; for PyTorch and ONNX Runtime,
+the first line of the row in final.txt), and jitNN's ratio to the faster of PyTorch and ONNX Runtime and
+to the fastest of all. Peak memory is the run's peak minus the idle device memory before it. jitNN's time
+is its best configuration's median.
 
   python gpu_summary.py <out dir>/final.txt [summary.json]"""
 import re,collections,statistics as st,json

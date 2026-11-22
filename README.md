@@ -1,8 +1,9 @@
 # jitNN benchmarking
 
-Benchmarks of [jitNN](https://github.com/beestream-ai/jitNN) against PyTorch, ONNX Runtime,
-TensorRT and DJL, the tools that run them, and their results. The numbers and how they were taken
-are in [PERFORMANCE.md](PERFORMANCE.md).
+Benchmarks of [jitNN](https://github.com/beestream-ai/jitNN) against PyTorch and ONNX Runtime, the
+tools that run them, and their results. The tools can also time TensorRT and DJL's own engines;
+neither is in the published results yet. The numbers and how they were taken are in
+[PERFORMANCE.md](PERFORMANCE.md).
 
 ## Latest results
 
